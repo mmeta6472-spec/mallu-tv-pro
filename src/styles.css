@@ -36,3 +36,13 @@
 .footer>div:last-child{flex-wrap:wrap}
 @media(max-width:850px){.main-area{padding:0 20px}.channel-pack-section{padding:17px}.channel-pack-section .section-heading h2{font-size:18px}}
 @media(max-width:600px){.main-area{padding:0 13px}.channel-pack-section{padding:14px;border-radius:14px}.channel-pack-section .section-heading{align-items:flex-start;gap:10px}.channel-pack-section .section-heading h2{font-size:17px}.channel-pack-section .section-heading p{font-size:11px}.channel-pack-card{min-height:75px}.channel-pack-card>button{min-width:91px;font-size:10px}.creator-credit{width:100%}}
+
+/* Keep the live player visible while browsing the channel list */
+.player-column{position:sticky;top:14px;align-self:start;z-index:12}
+.video-shell{box-shadow:0 16px 42px rgba(0,0,0,.24),0 0 0 1px rgba(115,151,230,.08);border-color:rgba(112,145,213,.34)}
+.video-shell:after{content:"";position:absolute;inset:0;pointer-events:none;border-radius:inherit;box-shadow:inset 0 1px 0 rgba(255,255,255,.06)}
+.player-controls{backdrop-filter:blur(7px)}
+.player-controls button[aria-label="Landscape mode"]{color:#9fc1ff}
+.player-controls button[aria-label="Landscape mode"]:hover{background:#5685ed30;color:#fff}
+@media(max-width:900px){.player-column{top:8px}}
+@media(max-width:600px){.player-column{top:6px}.video-shell{box-shadow:0 12px 32px rgba(0,0,0,.28)}}
