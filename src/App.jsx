@@ -364,18 +364,25 @@ export default function App() {
         enableWorker: true,
         capLevelToPlayerSize: true,
         startLevel: -1,
-        abrEwmaDefaultEstimate: 500000,
-        maxBufferLength: 30,
-        maxMaxBufferLength: 60,
-        backBufferLength: 30,
-        manifestLoadingTimeOut: 20000,
+        startFragPrefetch: true,
+        lowLatencyMode: true,
+        liveSyncDurationCount: 2,
+        liveMaxLatencyDurationCount: 6,
+        maxLiveSyncPlaybackRate: 1.08,
+        abrEwmaDefaultEstimate: 900000,
+        maxLoadingDelay: 3,
+        maxStarvationDelay: 3,
+        maxBufferLength: 12,
+        maxMaxBufferLength: 30,
+        backBufferLength: 10,
+        manifestLoadingTimeOut: 15000,
         levelLoadingTimeOut: 20000,
-        fragLoadingTimeOut: 30000,
-        fragLoadingMaxRetry: 4,
-        fragLoadingRetryDelay: 1000,
-        fragLoadingMaxRetryTimeout: 8000,
-        manifestLoadingMaxRetry: 3,
-        levelLoadingMaxRetry: 3
+        fragLoadingTimeOut: 25000,
+        fragLoadingMaxRetry: 5,
+        fragLoadingRetryDelay: 800,
+        fragLoadingMaxRetryTimeout: 10000,
+        manifestLoadingMaxRetry: 4,
+        levelLoadingMaxRetry: 4
       })
       hlsRef.current = hls
       hls.loadSource(selected.url)
@@ -412,12 +419,33 @@ export default function App() {
       }
     }
     const onVideoError = () => {
-      if (video.error) setNotice('Playback failed (' + video.error.code + '). Try another stream URL or browser-supported format.')
+      if (!video.error) return
+      const code = video.error.code
+      const detail = code === 2
+        ? 'Network error: the stream server may be offline or blocking this connection.'
+        : code === 3
+          ? 'The stream codec or media data is not supported by this browser.'
+          : code === 4
+            ? 'This stream format or URL is not supported by this browser.'
+            : 'The stream could not be decoded.'
+      setPlaying(false)
+      setNotice(detail + ' Try another channel or a browser-compatible HLS (.m3u8) or DASH (.mpd) stream.')
+    }
+    const onWaiting = () => {
+      if (!video.paused && video.readyState < 3) setNotice('Buffering stream…')
+    }
+    const onPlaying = () => {
+      setPlaying(true)
+      setNotice('')
     }
     video.addEventListener('error', onVideoError)
+    video.addEventListener('waiting', onWaiting)
+    video.addEventListener('playing', onPlaying)
     setRecent(old => [selected.id, ...old.filter(id => id !== selected.id)].slice(0, 30))
     return () => {
       video.removeEventListener('error', onVideoError)
+      video.removeEventListener('waiting', onWaiting)
+      video.removeEventListener('playing', onPlaying)
       if (hlsRef.current) { if (typeof hlsRef.current.destroy === 'function') hlsRef.current.destroy(); else if (typeof hlsRef.current.reset === 'function') hlsRef.current.reset(); hlsRef.current = null }
     }
   }, [selected?.id, selected?.url])
