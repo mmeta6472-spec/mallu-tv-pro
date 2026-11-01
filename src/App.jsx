@@ -109,6 +109,9 @@ const tamilChannels = [
 ]
 
 const sportsChannels = [
+  { id:'sports-bein-sports', name:'beIN Sports', group:'Sports', country:'Global', logo:'BEIN', url:'https://tvsen6.aynaott.com/beinsports/index.m3u8', color:'linear-gradient(135deg,#7c2d12,#ea580c)' },
+  { id:'sports-bein-xtra', name:'beIN Sports Xtra', group:'Sports', country:'Global', logo:'BEIN+', url:'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8', color:'linear-gradient(135deg,#7c2d12,#ea580c)' },
+  { id:'sports-ptv-sports-hd', name:'PTV Sports HD', group:'Sports', country:'Pakistan', logo:'PTV', url:'https://flussonic.defineatoz.com/PTV/index.m3u8', color:'linear-gradient(135deg,#15803d,#0f766e)' },
   { id:'sports-sdmedia', name:'SD Media Sports', group:'Sports', country:'India', logo:'SDM', url:'https://real-vk.proxy.nellaiiptv.com/SDMEDIA/index.m3u8', color:'linear-gradient(135deg,#0f766e,#22c55e)' },
   { id:'sports-eurosport-hd', name:'Eurosport HD', group:'Sports', country:'Global', logo:'EURO', url:'https://drk6xq0vhn.gpcdn.net/live/euro_sports_hd_abr/index.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
   { id:'sports-pishow-1161', name:'Sports Channel (PiShow 1161)', group:'Sports', country:'Global', logo:'1161', url:'https://cdn.pishow.tv/ott/live/1161/master.m3u8', color:'linear-gradient(135deg,#ea580c,#dc2626)' },
