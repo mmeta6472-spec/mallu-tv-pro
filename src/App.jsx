@@ -469,7 +469,7 @@ export default function App() {
         channels = records
           .filter(channel => channel.online === true && channel.is_nsfw !== true && Array.isArray(channel.streams))
           .map(channel => {
-            const stream = channel.streams.find(item => item && item.health && item.health.status === 'online' && typeof item.url === 'string' && /^https?:\\/\\//i.test(item.url) && !item.referrer && !item.user_agent)
+            const stream = channel.streams.find(item => item && item.health && item.health.status === 'online' && typeof item.url === 'string' && (item.url.startsWith('https://') || item.url.startsWith('http://')) && !item.referrer && !item.user_agent)
             if (!stream) return null
             return { id: pack.id + '-' + channel.id, name: channel.name, group: pack.group, country: channel.country || 'Unknown', logo: channel.logo || '', url: stream.url, source: pack.name, tvgId: channel.id || '', color: pack.color }
           })
