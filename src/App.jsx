@@ -381,21 +381,25 @@ export default function App() {
       hls.loadSource(selected.url)
       hls.attachMedia(video)
       hls.on(Hls.Events.MANIFEST_PARSED, () => {
-        video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start this stream. Some browsers block autoplay.'))
+        setNotice('')
+        video.play().then(() => setPlaying(true)).catch(() => setNotice('Stream loaded. Press Play if playback does not start automatically.'))
       })
       hls.on(Hls.Events.ERROR, (_, data) => {
         if (!data.fatal) return
-        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 2) {
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 4) {
           networkRetries += 1
-          setNotice('Connection interrupted. Trying to reconnect…')
-          window.setTimeout(() => { if (hlsRef.current === hls) hls.startLoad() }, 1200 * networkRetries)
+          const delay = Math.min(1500 * networkRetries, 6000)
+          setNotice('Connection interrupted. Reconnecting (' + networkRetries + '/4)…')
+          window.setTimeout(() => {
+            if (hlsRef.current === hls) hls.startLoad()
+          }, delay)
         } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR && !mediaRecoveryUsed) {
           mediaRecoveryUsed = true
           setNotice('Recovering the media decoder…')
           hls.recoverMediaError()
         } else {
           setPlaying(false)
-          setNotice('This stream is unavailable or unsupported. Check the URL, CORS, codec, and provider permissions.')
+          setNotice('This channel could not connect after several attempts. The source may be offline, blocked in your region, or blocking browser playback. Try another channel.')
           hls.destroy()
           if (hlsRef.current === hls) hlsRef.current = null
         }
