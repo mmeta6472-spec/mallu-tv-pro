@@ -283,11 +283,11 @@ export default function App() {
   useEffect(() => {
     const video = videoRef.current
     if (!video || !selected?.url) {
-      if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null }
+      if (hlsRef.current) { if (typeof hlsRef.current.destroy === 'function') hlsRef.current.destroy(); else if (typeof hlsRef.current.reset === 'function') hlsRef.current.reset(); hlsRef.current = null }
       setPlaying(false)
       return
     }
-    if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null }
+    if (hlsRef.current) { if (typeof hlsRef.current.destroy === 'function') hlsRef.current.destroy(); else if (typeof hlsRef.current.reset === 'function') hlsRef.current.reset(); hlsRef.current = null }
     video.pause()
     video.removeAttribute('src')
     video.load()
@@ -363,7 +363,7 @@ export default function App() {
     setRecent(old => [selected.id, ...old.filter(id => id !== selected.id)].slice(0, 30))
     return () => {
       video.removeEventListener('error', onVideoError)
-      if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null }
+      if (hlsRef.current) { if (typeof hlsRef.current.destroy === 'function') hlsRef.current.destroy(); else if (typeof hlsRef.current.reset === 'function') hlsRef.current.reset(); hlsRef.current = null }
     }
   }, [selected?.id, selected?.url])
 
