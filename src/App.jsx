@@ -297,7 +297,7 @@ export default function App() {
   const [playlists, setPlaylists] = useState(loadSaved)
   const [favorites, setFavorites] = useState(loadIds('mallu-tv-favorites'))
   const [recent, setRecent] = useState(loadIds('mallu-tv-recent'))
-  const [selected, setSelected] = useState(null)
+  const [selected, setSelected] = useState(starterChannels[0])
   const [notice, setNotice] = useState('')
   const [category, setCategory] = useState('All channels')
   const [muted, setMuted] = useState(false)
@@ -312,7 +312,7 @@ export default function App() {
   const fileRef = useRef(null)
 
   const importedChannels = useMemo(() => playlists.flatMap(p => p.channels || []), [playlists])
-  const allChannels = useMemo(() => importedChannels.filter(c => typeof c.url === 'string' && c.url.trim()), [importedChannels])
+  const allChannels = useMemo(() => [...starterChannels, ...importedChannels].filter(c => typeof c.url === 'string' && c.url.trim()), [importedChannels])
   const channelGroups = useMemo(() => ['All channels', ...new Set(allChannels.map(c => c.group || 'Other'))], [allChannels])
   const filteredChannels = useMemo(() => {
     let items = allChannels
@@ -632,6 +632,10 @@ export default function App() {
                 <div><span>YOUR CHANNELS</span><strong>{importedChannels.length}</strong></div>
                 <div><span>FAVOURITES</span><strong>{favorites.length}</strong></div>
               </div>
+            </section>
+            <section className="section simple-playlists">
+              <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> CHANNEL COLLECTIONS</div><h2>Browse all channels</h2><p>Your built-in channels are back. Add more collections whenever you want.</p></div><button className="secondary-button compact" onClick={() => setPage('live')}><Radio size={15}/> All channels ({allChannels.length})</button></div>
+              <div className="simple-pack-grid">{publicChannelPacks.map(pack => <button className="simple-pack-card" key={pack.id} onClick={() => addChannelPack(pack)}><span className="simple-pack-icon"><pack.icon size={18}/></span><span><strong>{pack.name}</strong><small>{pack.description}</small></span><ChevronRight size={16}/></button>)}</div>
             </section>
             <section className="section simple-playlists">
               <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> YOUR LIBRARY</div><h2>Your playlists</h2><p>Only the playlists you add appear here. No oversized public channel packs.</p></div><button className="primary-button compact" onClick={() => setShowImport(true)}><Plus size={15}/> Add playlist</button></div>
