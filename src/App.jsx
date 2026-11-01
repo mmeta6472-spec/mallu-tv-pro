@@ -123,6 +123,8 @@ const sportsChannels = [
   { id:'sports-a028', name:'Sports Channel A028', group:'Sports', country:'Global', logo:'A028', url:'http://103.151.60.162:2122/play/a028/index.m3u8?hls', color:'linear-gradient(135deg,#334155,#2563eb)' },
   { id:'sports-fifa-plus-women', name:'FIFA+ Women', group:'Sports', country:'Global', logo:'FIFA+', url:'https://cffda8ff.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/U2Ftc3VuZy1nYl9GSUZBUGx1c3dvbWVuX0hMUw/playlist.m3u8', color:'linear-gradient(135deg,#15803d,#0f766e)' },
   { id:'sports-pluto-feed', name:'Sports Channel (Pluto feed)', group:'Sports', country:'Global', logo:'PLU', url:'https://jmp2.uk/plu-660bfc032433010008def35a.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
+  { id:"sports-live-a085", name:"Sports Channel A085", group:"Sports", country:"Global", logo:"A085", url:"http://138.59.227.20:8000/play/a085/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
+  { id:"sports-live-a0ao", name:"Sports Channel A0AO", group:"Sports", country:"Global", logo:"A0AO", url:"http://158.172.155.130:8000/play/a0ao/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
   { id:'catalog-bein-movies-1-hd', name:"beIN MOVIES 1 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
   { id:'catalog-bein-movies-2-hd', name:"beIN MOVIES 2 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
   { id:'catalog-bein-movies-3-hd', name:"beIN MOVIES 3 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
@@ -145,10 +147,9 @@ const sportsChannels = [
   { id:'catalog-jeem-hd', name:"Jeem HD", group:"Kids", country:'Global', logo:"JEEM", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
   { id:'catalog-baraem', name:"Baraem", group:"Kids", country:'Global', logo:"BARA", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
   { id:'catalog-baby-tv', name:"Baby TV", group:"Kids", country:'Global', logo:"BABY", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
-  { id:"added-live-a085", name:"Live Channel A085", group:"Entertainment", country:"Global", logo:"A085", url:"http://138.59.227.20:8000/play/a085/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
-  { id:"added-live-a0ao", name:"Live Channel A0AO", group:"Entertainment", country:"Global", logo:"A0AO", url:"http://158.172.155.130:8000/play/a0ao/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
+
+
   { id:"added-sony-one-blacklist", name:"Sony One: The Blacklist", group:"Entertainment", country:"Global", logo:"SONY", url:"https://06cb85ad6ccb4a6b97f561e62d16ad3f.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-822-FR-SONYONETHEBLACKLIST-LG_FR/playlist.m3u8", color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:"added-live-1552", name:"Live Channel 1552", group:"Entertainment", country:"Global", logo:"1552", url:"http://45.184.109.10/live/69393EAE6ADBC65A68F942022362A202/1552.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
   { id:"added-nickelodeon", name:"Nickelodeon", group:"Kids", country:"Global", logo:"NICK", url:"http://198.58.104.90:8989/nickelodeon/index.m3u8", color:"linear-gradient(135deg,#db2777,#7c3aed)" },
 ]
 
