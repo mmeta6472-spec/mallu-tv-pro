@@ -227,13 +227,14 @@ const navItems = [
 ]
 
 const publicChannelPacks = [
-  { id:'pack-hindi', name:'Hindi Channels', group:'Hindi', description:'Hindi-language TV', url:'https://dearbulut.github.io/iptv/playlists/language/hin.m3u', icon:Globe2, color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
-  { id:'pack-tamil', name:'Tamil Channels', group:'Tamil', description:'Tamil-language TV', url:'https://dearbulut.github.io/iptv/playlists/language/tam.m3u', icon:Globe2, color:'linear-gradient(135deg,#0f766e,#2dd4bf)' },
-  { id:'pack-english', name:'English Channels', group:'English', description:'English-language TV', url:'https://dearbulut.github.io/iptv/playlists/language/eng.m3u', icon:Globe2, color:'linear-gradient(135deg,#1d4ed8,#60a5fa)' },
+  { id:'pack-tamil', name:'Tamil Channels', group:'Tamil', description:'Health-checked Tamil streams', url:'https://dearbulut.github.io/iptv/api/v1/by-language/tam.json', format:'json', icon:Globe2, color:'linear-gradient(135deg,#0f766e,#2dd4bf)' },
+  { id:'pack-hindi', name:'Hindi Channels', group:'Hindi', description:'Health-checked Hindi streams', url:'https://dearbulut.github.io/iptv/api/v1/by-language/hin.json', format:'json', icon:Globe2, color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
+  { id:'pack-english', name:'English Channels', group:'English', description:'Health-checked English streams', url:'https://dearbulut.github.io/iptv/api/v1/by-language/eng.json', format:'json', icon:Globe2, color:'linear-gradient(135deg,#1d4ed8,#60a5fa)' },
   { id:'pack-entertainment', name:'Entertainment', group:'Entertainment', description:'General entertainment', url:'https://dearbulut.github.io/iptv/playlists/category/entertainment.m3u', icon:Tv, color:'linear-gradient(135deg,#7c3aed,#c084fc)' },
   { id:'pack-movies', name:'Movies & Cinema', group:'Movies', description:'Movie channels', url:'https://dearbulut.github.io/iptv/playlists/category/movies.m3u', icon:Film, color:'linear-gradient(135deg,#9a3412,#fb923c)' },
-  { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Kids and animation channels', url:'https://dearbulut.github.io/iptv/playlists/category/kids.m3u', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
-  { id:'pack-sports', name:'Sports', group:'Sports', description:'Sports channels', url:'https://dearbulut.github.io/iptv/playlists/category/sports.m3u', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
+  { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Health-checked kids channels', url:'https://dearbulut.github.io/iptv/api/v1/by-category/kids.json', format:'json', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
+  { id:'pack-animation', name:'Cartoons & Animation', group:'Animation', description:'Health-checked animation channels', url:'https://dearbulut.github.io/iptv/api/v1/by-category/animation.json', format:'json', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
+  { id:'pack-sports', name:'Sports', group:'Sports', description:'Health-checked sports streams', url:'https://dearbulut.github.io/iptv/api/v1/by-category/sports.json', format:'json', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
 ]
 
 
@@ -452,32 +453,43 @@ export default function App() {
   async function addChannelPack(pack) {
     const existing = playlists.find(p => p.source === pack.url)
     if (existing) {
-      setNotice(`${pack.name} is already in your playlist library.`)
+      setNotice(pack.name + ' is already in your playlist library.')
       setPage('live')
       setCategory(pack.group)
       return
     }
-    setNotice(`Loading ${pack.name}…`)
+    setNotice('Checking working streams in ' + pack.name + '…')
     try {
       const response = await fetch(pack.url, { cache: 'no-store' })
-      if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`)
-      const playlistText = await response.text()
-      const parsed = parseM3U(playlistText, pack.name)
-      if (!parsed.length) throw new Error('No playable channel entries were found in this playlist.')
-      const channels = parsed.map(channel => ({ ...channel, id: `${pack.id}-${channel.id}`, group: pack.group, color: pack.color }))
+      if (!response.ok) throw new Error('Source request failed (' + response.status + ').')
+      let channels = []
+      if (pack.format === 'json') {
+        const records = await response.json()
+        if (!Array.isArray(records)) throw new Error('The source returned an unexpected channel list.')
+        channels = records
+          .filter(channel => channel.online === true && channel.is_nsfw !== true && Array.isArray(channel.streams))
+          .map(channel => {
+            const stream = channel.streams.find(item => item && item.health && item.health.status === 'online' && typeof item.url === 'string' && /^https?:\\/\\//i.test(item.url) && !item.referrer && !item.user_agent)
+            if (!stream) return null
+            return { id: pack.id + '-' + channel.id, name: channel.name, group: pack.group, country: channel.country || 'Unknown', logo: channel.logo || '', url: stream.url, source: pack.name, tvgId: channel.id || '', color: pack.color }
+          })
+          .filter(Boolean)
+      } else {
+        const parsed = parseM3U(await response.text(), pack.name)
+        channels = parsed.map(channel => ({ ...channel, id: pack.id + '-' + channel.id, group: pack.group, color: pack.color }))
+      }
+      if (!channels.length) throw new Error('No channels passed the latest online health check with browser-compatible stream URLs.')
       setPlaylists(old => {
-        const found = old.some(p => p.source === pack.url)
-        if (found) return old
+        if (old.some(p => p.source === pack.url)) return old
         return [...old, { id: crypto.randomUUID(), name: pack.name, source: pack.url, channels, addedAt: new Date().toISOString() }]
       })
       setPage('live')
       setCategory(pack.group)
-      setNotice(`${channels.length} channels added. Some streams may be offline or region-restricted.`)
+      setNotice(channels.length + ' health-checked channels added to ' + pack.name + '.')
     } catch (err) {
-      setNotice(`Couldn't load ${pack.name}: ${err.message || 'Playlist unavailable'}. The source may block browser access (CORS). Try its HTTPS-proxy playlist in an external player or download and import the M3U file.`)
+      setNotice('Couldn’t load ' + pack.name + ': ' + (err.message || 'Playlist unavailable') + '. Please try again later.')
     }
   }
-
   function importFile(file) {
     if (!file) return
     const reader = new FileReader()
