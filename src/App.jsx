@@ -5,7 +5,7 @@ import {
   Search, Home, Radio, Trophy, Film, Newspaper, Heart, Clock3, Settings,
   Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight, ChevronDown,
   Upload, Link2, Trash2, X, Tv, Globe2, Menu, MonitorPlay, ListVideo,
-  CheckCircle2, AlertCircle, ExternalLink, Info
+  CheckCircle2, AlertCircle, ExternalLink, Info, PictureInPicture2
 } from 'lucide-react'
 
 const malayalamChannels = [
@@ -223,9 +223,6 @@ const starterChannels = [
 const navItems = [
   { id:'home', label:'Home', icon:Home },
   { id:'live', label:'Live TV', icon:Radio },
-  { id:'sports', label:'Sports', icon:Trophy },
-  { id:'movies', label:'Movies & Shows', icon:Film },
-  { id:'news', label:'News', icon:Newspaper },
   { id:'favorites', label:'My Favorites', icon:Heart },
   { id:'recent', label:'Recently Watched', icon:Clock3 },
 ]
@@ -300,13 +297,14 @@ export default function App() {
   const [playlists, setPlaylists] = useState(loadSaved)
   const [favorites, setFavorites] = useState(loadIds('mallu-tv-favorites'))
   const [recent, setRecent] = useState(loadIds('mallu-tv-recent'))
-  const [selected, setSelected] = useState(starterChannels[0])
+  const [selected, setSelected] = useState(null)
   const [notice, setNotice] = useState('')
   const [category, setCategory] = useState('All channels')
   const [muted, setMuted] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [quality, setQuality] = useState('Auto')
-  const [channelListLimit, setChannelListLimit] = useState(300)
+  const [channelListLimit, setChannelListLimit] = useState(100)
+  const [miniPlayer, setMiniPlayer] = useState(false)
   const [volume, setVolume] = useState(0.8)
   const [showSettings, setShowSettings] = useState(false)
   const videoRef = useRef(null)
@@ -314,7 +312,7 @@ export default function App() {
   const fileRef = useRef(null)
 
   const importedChannels = useMemo(() => playlists.flatMap(p => p.channels || []), [playlists])
-  const allChannels = useMemo(() => [...starterChannels, ...importedChannels].filter(c => typeof c.url === 'string' && c.url.trim()), [importedChannels])
+  const allChannels = useMemo(() => importedChannels.filter(c => typeof c.url === 'string' && c.url.trim()), [importedChannels])
   const channelGroups = useMemo(() => ['All channels', ...new Set(allChannels.map(c => c.group || 'Other'))], [allChannels])
   const filteredChannels = useMemo(() => {
     let items = allChannels
@@ -332,7 +330,7 @@ export default function App() {
   useEffect(() => { localStorage.setItem('mallu-tv-favorites', JSON.stringify(favorites)) }, [favorites])
   useEffect(() => { localStorage.setItem('mallu-tv-recent', JSON.stringify(recent)) }, [recent])
 
-  useEffect(() => { setChannelListLimit(300) }, [page, category, search])
+  useEffect(() => { setChannelListLimit(100) }, [page, category, search])
 
   useEffect(() => {
     const video = videoRef.current
@@ -509,7 +507,7 @@ export default function App() {
   function removePlaylist(id) {
     const p = playlists.find(item => item.id === id)
     setPlaylists(old => old.filter(item => item.id !== id))
-    if (p?.channels?.some(c => c.id === selected.id)) setSelected(starterChannels[0])
+    if (p?.channels?.some(c => c.id === selected?.id)) { setSelected(null); setMiniPlayer(false) }
   }
   function openPopupPlayer() {
     if (!selected?.url) { setShowImport(true); setNotice('Choose a channel or import a playlist first.'); return }
@@ -620,26 +618,24 @@ export default function App() {
 
         {page === 'home' ? (
           <>
-            <section className="hero">
-              <div className="hero-art">
-                <div className="hero-glow glow-one"/><div className="hero-glow glow-two"/>
-                <div className="hero-grid"/>
-                <div className="hero-figure"><div className="figure-halo"/><div className="figure-head"/><div className="figure-body"/></div>
-                <div className="hero-stamp">M<br/><small>PRO</small></div>
-                <div className="hero-content">
-                  <div className="eyebrow"><span className="live-pulse"/> YOUR ENTERTAINMENT, CONNECTED</div>
-                  <h1>Every screen.<br/><span>One destination.</span></h1>
-                  <p>Your personal home for live TV, sports, news and entertainment. Bring your playlists and watch your way.</p>
-                  <div className="hero-actions"><button className="primary-button" onClick={() => { setPage('live'); setCategory('All channels') }}><Play size={17} fill="currentColor"/> Explore Live TV</button><button className="secondary-button" onClick={() => setShowImport(true)}><Plus size={17}/> Add playlist</button></div>
-                  <div className="hero-proof"><span><CheckCircle2 size={14}/> M3U & M3U8</span><span><CheckCircle2 size={14}/> Multi-device</span><span><CheckCircle2 size={14}/> Your playlists</span></div>
-                </div>
-                <div className="hero-caption"><span className="caption-line"/> MALLU ORIGINAL EXPERIENCE <span className="caption-index">01 / 04</span></div>
+            <section className="simple-home">
+              <div className="simple-home-glow"/>
+              <div className="eyebrow"><span className="live-pulse"/> YOUR PERSONAL TV SPACE</div>
+              <h1>All your TV.<br/><span>One simple place.</span></h1>
+              <p>Add your own M3U or M3U8 playlist and watch your channels in one clean player.</p>
+              <div className="simple-home-actions">
+                <button className="primary-button" onClick={() => setShowImport(true)}><Plus size={17}/> Add playlist</button>
+                <button className="secondary-button" onClick={() => setPage('live')}><Play size={16} fill="currentColor"/> Open player</button>
+              </div>
+              <div className="library-summary">
+                <div><span>YOUR PLAYLISTS</span><strong>{playlists.length}</strong></div>
+                <div><span>YOUR CHANNELS</span><strong>{importedChannels.length}</strong></div>
+                <div><span>FAVOURITES</span><strong>{favorites.length}</strong></div>
               </div>
             </section>
-            <section className="section channel-pack-section">
-              <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> GET STARTED</div><h2>Add channels by category</h2><p>Choose a category, tap Add channels, then open Live TV to watch. Your Malayalam list stays separate.</p></div><span className="section-count">8 CATEGORIES</span></div>
-              <div className="channel-pack-grid">{publicChannelPacks.map(pack => { const Icon = pack.icon; const added = playlists.some(p => p.source === pack.url); return <article className="channel-pack-card" key={pack.id}><div className="channel-pack-icon" style={{background:pack.color}}><Icon size={21}/></div><div className="channel-pack-copy"><strong>{pack.name}</strong><span>{pack.description}</span></div><button className={added ? 'channel-pack-added' : ''} onClick={() => addChannelPack(pack)}>{added ? 'Added' : 'Add channels'}{added ? <CheckCircle2 size={14}/> : <Plus size={14}/>}</button></article> })}</div>
-              <p className="channel-pack-note"><Info size={14}/> Public playlists can change. Channels may be geo-restricted, offline, or blocked by their source; this app does not bypass DRM or provider access controls.</p>
+            <section className="section simple-playlists">
+              <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> YOUR LIBRARY</div><h2>Your playlists</h2><p>Only the playlists you add appear here. No oversized public channel packs.</p></div><button className="primary-button compact" onClick={() => setShowImport(true)}><Plus size={15}/> Add playlist</button></div>
+              {playlists.length ? <div className="simple-playlist-list">{playlists.map(p => <article className="simple-playlist-item" key={p.id}><div className="playlist-icon"><ListVideo size={19}/></div><div><strong>{p.name}</strong><span>{p.channels.length} channels</span></div><button className="text-button" onClick={() => {setPage('live');setCategory('All channels')}}>Open <ChevronRight size={14}/></button></article>)}</div> : <div className="simple-empty"><div className="empty-icon"><ListVideo size={23}/></div><strong>Your library is empty</strong><span>Add a playlist URL or upload an M3U file to get started.</span><button className="secondary-button" onClick={() => setShowImport(true)}><Plus size={15}/> Add your first playlist</button></div>}
             </section>
           </>
         ) : (
@@ -648,19 +644,19 @@ export default function App() {
             {page === 'live' && <div className="category-tabs">{channelGroups.map(g => <button key={g} className={category === g ? 'selected' : ''} onClick={() => setCategory(g)}>{g}</button>)}</div>}
             {page === 'live' && <div className="live-layout">
               <div className="player-column">
-                <div className="video-shell">
+                <div className={`video-shell ${miniPlayer ? "mini-player-active" : ""}`}>
                   <video ref={videoRef} playsInline controls={false} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onVolumeChange={e => { setMuted(e.target.muted); setVolume(e.target.volume) }}/>
                   {!selected?.url && <div className="player-empty"><div className="empty-tv"><Tv size={33}/><span className="empty-signal"/></div><span className="live-badge"><i/> LIVE PLAYER</span><h2>Ready when you are.</h2><p>Choose a channel with a stream URL, or import your M3U/M3U8 playlist.</p><button className="primary-button" onClick={() => setShowImport(true)}><Plus size={16}/> Import channels</button></div>}
                   {selected?.url && <div className="video-overlay-top"><span className="live-badge"><i/> LIVE</span><span className="quality-badge">{quality === 'Auto' ? 'AUTO' : quality}</span></div>}
-                  <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={openPopupPlayer} aria-label="Open pop-up player" title="Open pop-up player"><ExternalLink size={17}/></button><button onClick={landscapeMode} aria-label="Landscape mode" title="Open landscape mode"><MonitorPlay size={18}/></button><button onClick={fullscreen} aria-label="Fullscreen" title="Fullscreen"><Maximize size={18}/></button></div>
+                  <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={() => setMiniPlayer(v => !v)} aria-label={miniPlayer ? "Close mini player" : "Open inbuilt picture in picture"} title={miniPlayer ? "Close mini player" : "Inbuilt picture in picture"}><PictureInPicture2 size={18}/></button><button onClick={landscapeMode} aria-label="Landscape mode" title="Open landscape mode"><MonitorPlay size={18}/></button><button onClick={fullscreen} aria-label="Fullscreen" title="Fullscreen"><Maximize size={18}/></button></div>
                 </div>
-                <div className="now-playing"><div className="channel-logo large" style={{background:selected.color}}>{selected.logo && selected.logo.length < 3 ? selected.logo : <Tv size={21}/>}</div><div className="now-title"><span>NOW PLAYING</span><h2>{selected.name}</h2><p>{selected.group} <b>·</b> {selected.country || 'Global'}</p></div><button className={`round-action ${favorites.includes(selected.id) ? 'favorited' : ''}`} onClick={() => toggleFavorite(selected)} title="Toggle favorite"><Heart size={18} fill={favorites.includes(selected.id) ? 'currentColor' : 'none'}/></button></div>
+                {selected && <div className="now-playing"><div className="channel-logo large" style={{background:selected.color}}>{selected.logo && selected.logo.length < 3 ? selected.logo : <Tv size={21}/>}</div><div className="now-title"><span>NOW PLAYING</span><h2>{selected.name}</h2><p>{selected.group} <b>·</b> {selected.country || 'Global'}</p></div><button className={`round-action ${favorites.includes(selected.id) ? 'favorited' : ''}`} onClick={() => toggleFavorite(selected)} title="Toggle favorite"><Heart size={18} fill={favorites.includes(selected.id) ? 'currentColor' : 'none'}/></button></div>}
                 {notice && <div className="notice"><Info size={16}/><span>{notice}</span><button onClick={() => setNotice('')}><X size={15}/></button></div>}
               </div>
-              <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.slice(0, channelListLimit).map((c,i) => <ChannelRow key={c.id} channel={c} active={selected.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div>{filteredChannels.length > channelListLimit && <button className="load-more-channels" onClick={() => setChannelListLimit(n => Math.min(n + 300, filteredChannels.length))}>Load more channels ({filteredChannels.length - channelListLimit} remaining)</button>}</aside>
+              <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.slice(0, channelListLimit).map((c,i) => <ChannelRow key={c.id} channel={c} active={selected?.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div>{filteredChannels.length > channelListLimit && <button className="load-more-channels" onClick={() => setChannelListLimit(n => Math.min(n + 300, filteredChannels.length))}>Load more ({filteredChannels.length - channelListLimit} remaining)</button>}</aside>
             </div>}
             {page !== 'live' && <ChannelSection title={filteredChannels.length ? `${filteredChannels.length} channels` : 'Nothing here yet'} subtitle={filteredChannels.length ? 'Select a channel to open it in the player.' : 'Import a playlist or save a channel as a favorite to see it here.'} channels={filteredChannels} onSelect={c => { selectChannel(c); setPage('live') }} selected={selected} favorites={favorites} onFavorite={toggleFavorite} emptyAction={() => setShowImport(true)}/>}
-            {page === 'live' && filteredChannels.some(c => c.id !== selected.id) && <ChannelSection title="More to explore" subtitle="More channels in this category" channels={filteredChannels.filter(c => c.id !== selected.id).slice(0,6)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>} 
+            {page === 'live' && filteredChannels.some(c => c.id !== selected?.id) && <ChannelSection title="More to explore" subtitle="More channels in this category" channels={filteredChannels.filter(c => c.id !== selected?.id).slice(0,6)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>} 
           </section>
         )}
 
