@@ -3,7 +3,7 @@ import Hls from 'hls.js'
 import dashjs from 'dashjs'
 import {
   Search, Home, Radio, Trophy, Film, Newspaper, Heart, Clock3, Settings,
-  Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight, ChevronDown,
+  Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight,
   Upload, Link2, Trash2, X, Tv, Globe2, Menu, MonitorPlay, ListVideo,
   CheckCircle2, AlertCircle, ExternalLink, Info
 } from 'lucide-react'
@@ -303,7 +303,6 @@ export default function App() {
   const [selected, setSelected] = useState(starterChannels[0])
   const [notice, setNotice] = useState('')
   const [category, setCategory] = useState('All channels')
-  const [guideOpen, setGuideOpen] = useState(true)
   const [muted, setMuted] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [quality, setQuality] = useState('Auto')
@@ -637,19 +636,11 @@ export default function App() {
                 <div className="hero-caption"><span className="caption-line"/> MALLU ORIGINAL EXPERIENCE <span className="caption-index">01 / 04</span></div>
               </div>
             </section>
-            <section className="quick-stats">
-              <div><span className="stat-icon blue"><Radio size={17}/></span><span><strong>{importedChannels.length}</strong><small>Imported channels</small></span></div>
-              <div><span className="stat-icon violet"><ListVideo size={17}/></span><span><strong>{playlists.length}</strong><small>Playlists</small></span></div>
-              <div><span className="stat-icon pink"><Heart size={17}/></span><span><strong>{favorites.length}</strong><small>Favorites</small></span></div>
-              <div className="stats-note"><span className="status-dot"/> Your library is stored on this device</div>
-            </section>
             <section className="section channel-pack-section">
               <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> GET STARTED</div><h2>Add channels by category</h2><p>Choose a category, tap Add channels, then open Live TV to watch. Your Malayalam list stays separate.</p></div><span className="section-count">8 CATEGORIES</span></div>
               <div className="channel-pack-grid">{publicChannelPacks.map(pack => { const Icon = pack.icon; const added = playlists.some(p => p.source === pack.url); return <article className="channel-pack-card" key={pack.id}><div className="channel-pack-icon" style={{background:pack.color}}><Icon size={21}/></div><div className="channel-pack-copy"><strong>{pack.name}</strong><span>{pack.description}</span></div><button className={added ? 'channel-pack-added' : ''} onClick={() => addChannelPack(pack)}>{added ? 'Added' : 'Add channels'}{added ? <CheckCircle2 size={14}/> : <Plus size={14}/>}</button></article> })}</div>
               <p className="channel-pack-note"><Info size={14}/> Public playlists can change. Channels may be geo-restricted, offline, or blocked by their source; this app does not bypass DRM or provider access controls.</p>
             </section>
-            <ChannelSection title="Jump into live TV" subtitle="Your channels, all in one place" channels={allChannels.slice(0, 8)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>
-            <ChannelSection title="Explore by mood" subtitle="Find something worth watching" categories={true} onCategory={g => { setCategory(g); setPage('live') }} groups={channelGroups}/>
           </>
         ) : (
           <section className="content-page">
@@ -669,8 +660,7 @@ export default function App() {
               <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.slice(0, channelListLimit).map((c,i) => <ChannelRow key={c.id} channel={c} active={selected.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div>{filteredChannels.length > channelListLimit && <button className="load-more-channels" onClick={() => setChannelListLimit(n => Math.min(n + 300, filteredChannels.length))}>Load more channels ({filteredChannels.length - channelListLimit} remaining)</button>}</aside>
             </div>}
             {page !== 'live' && <ChannelSection title={filteredChannels.length ? `${filteredChannels.length} channels` : 'Nothing here yet'} subtitle={filteredChannels.length ? 'Select a channel to open it in the player.' : 'Import a playlist or save a channel as a favorite to see it here.'} channels={filteredChannels} onSelect={c => { selectChannel(c); setPage('live') }} selected={selected} favorites={favorites} onFavorite={toggleFavorite} emptyAction={() => setShowImport(true)}/>}
-            {page === 'live' && <div className="epg-section"><button className="epg-toggle" onClick={() => setGuideOpen(!guideOpen)}><div><Clock3 size={17}/><strong>TV Guide</strong><span>Program information</span></div>{guideOpen ? <ChevronDown size={17}/> : <ChevronRight size={17}/>}</button>{guideOpen && <div className="epg-empty"><div className="epg-clock"><Clock3 size={22}/></div><div><strong>Your guide will appear here</strong><p>EPG data can be connected when your playlist or provider supplies compatible XMLTV guide information.</p></div><button className="text-button" onClick={() => setShowImport(true)}>Manage playlists <ChevronRight size={14}/></button></div>}</div>}
-            {page === 'live' && <ChannelSection title="More to explore" subtitle="Keep browsing your library" channels={filteredChannels.filter(c => c.id !== selected.id).slice(0,6)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>}
+            {page === 'live' && filteredChannels.some(c => c.id !== selected.id) && <ChannelSection title="More to explore" subtitle="More channels in this category" channels={filteredChannels.filter(c => c.id !== selected.id).slice(0,6)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>} 
           </section>
         )}
 
