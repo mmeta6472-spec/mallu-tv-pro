@@ -514,7 +514,7 @@ export default function App() {
           <div className="brand-mark"><Tv size={22} strokeWidth={2.5}/><span className="brand-dot"/></div>
           <div className="brand-name">MALLU TV <b>PRO</b><small>YOUR WORLD. YOUR TV.</small></div>
         </div>
-        <div className="profile-chip"><div className="profile-avatar">M</div><div><strong>Welcome back</strong><span>Personal TV hub</span></div><ChevronDown size={15}/></div>
+        <div className="profile-chip"><div className="profile-avatar creator-avatar">A</div><div><strong>Ashilthalakkattu</strong><span>Creator · MALLU TV PRO</span></div><ChevronDown size={15}/></div>
         <div className="nav-label">DISCOVER</div>
         <nav className="main-nav">
           {navItems.map(item => {
@@ -540,7 +540,7 @@ export default function App() {
           <div className="top-actions">
             <label className="search-box"><Search size={17}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Channels, shows, sports..." aria-label="Search channels"/><kbd>⌘ K</kbd></label>
             <button className="icon-button globe-button" title="Global availability"><Globe2 size={19}/></button>
-            <button className="user-button" title="Profile">M</button>
+            <button className="user-button" title="Created by Ashilthalakkattu">A</button>
           </div>
         </header>
 
@@ -569,8 +569,8 @@ export default function App() {
               <div className="stats-note"><span className="status-dot"/> Your library is stored on this device</div>
             </section>
             <section className="section channel-pack-section">
-              <div className="section-heading"><div><h2>Explore channel packs</h2><p>Add Hindi, Tamil, English, movies, cartoons and sports without changing your Malayalam list.</p></div><span className="section-count">PUBLIC PLAYLISTS</span></div>
-              <div className="channel-pack-grid">{publicChannelPacks.map(pack => { const Icon = pack.icon; const added = playlists.some(p => p.source === pack.url); return <article className="channel-pack-card" key={pack.id}><div className="channel-pack-icon" style={{background:pack.color}}><Icon size={21}/></div><div className="channel-pack-copy"><strong>{pack.name}</strong><span>{pack.description}</span></div><button className={added ? 'channel-pack-added' : ''} onClick={() => addChannelPack(pack)}>{added ? 'Added' : 'Add pack'}{added ? <CheckCircle2 size={14}/> : <Plus size={14}/>}</button></article> })}</div>
+              <div className="section-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> GET STARTED</div><h2>Add channels by category</h2><p>Choose a category, tap Add channels, then open Live TV to watch. Your Malayalam list stays separate.</p></div><span className="section-count">8 CATEGORIES</span></div>
+              <div className="channel-pack-grid">{publicChannelPacks.map(pack => { const Icon = pack.icon; const added = playlists.some(p => p.source === pack.url); return <article className="channel-pack-card" key={pack.id}><div className="channel-pack-icon" style={{background:pack.color}}><Icon size={21}/></div><div className="channel-pack-copy"><strong>{pack.name}</strong><span>{pack.description}</span></div><button className={added ? 'channel-pack-added' : ''} onClick={() => addChannelPack(pack)}>{added ? 'Added' : 'Add channels'}{added ? <CheckCircle2 size={14}/> : <Plus size={14}/>}</button></article> })}</div>
               <p className="channel-pack-note"><Info size={14}/> Public playlists can change. Channels may be geo-restricted, offline, or blocked by their source; this app does not bypass DRM or provider access controls.</p>
             </section>
             <ChannelSection title="Jump into live TV" subtitle="Your channels, all in one place" channels={allChannels.slice(0, 8)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>
@@ -599,7 +599,7 @@ export default function App() {
           </section>
         )}
 
-        <footer className="footer"><div className="footer-brand"><div className="brand-mark tiny"><Tv size={14}/></div><strong>MALLU TV PRO</strong></div><span>One place for your personal TV library.</span><div><button onClick={() => setShowSettings(true)}>Settings</button><button onClick={() => setShowImport(true)}>Playlists</button><span>© {new Date().getFullYear()} MALLU TV PRO</span></div></footer>
+        <footer className="footer"><div className="footer-brand"><div className="brand-mark tiny"><Tv size={14}/></div><strong>MALLU TV PRO</strong></div><span>One place for your personal TV library.</span><div><button onClick={() => setShowSettings(true)}>Settings</button><button onClick={() => setShowImport(true)}>Playlists</button><span>© {new Date().getFullYear()} MALLU TV PRO</span><span className="creator-credit">Created by <strong>Ashilthalakkattu</strong></span></div></footer>
       </main>
 
       {showImport && <div className="modal-backdrop" onMouseDown={e => { if(e.target === e.currentTarget) { setShowImport(false); setImportError('') } }}><div className="modal">
