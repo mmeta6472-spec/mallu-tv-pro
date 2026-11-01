@@ -125,30 +125,6 @@ const sportsChannels = [
   { id:'sports-pluto-feed', name:'Sports Channel (Pluto feed)', group:'Sports', country:'Global', logo:'PLU', url:'https://jmp2.uk/plu-660bfc032433010008def35a.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
   { id:"sports-live-a085", name:"Sports Channel A085", group:"Sports", country:"Global", logo:"A085", url:"http://138.59.227.20:8000/play/a085/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
   { id:"sports-live-a0ao", name:"Sports Channel A0AO", group:"Sports", country:"Global", logo:"A0AO", url:"http://158.172.155.130:8000/play/a0ao/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
-  { id:'catalog-bein-movies-1-hd', name:"beIN MOVIES 1 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-bein-movies-2-hd', name:"beIN MOVIES 2 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-bein-movies-3-hd', name:"beIN MOVIES 3 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-bein-movies-4-hd', name:"beIN MOVIES 4 HD", group:"Movies", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-star-movies-hd', name:"Star Movies HD", group:"Movies", country:'Global', logo:"STAR", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-star-world-hd', name:"Star World HD", group:"Movies", country:'Global', logo:"STAR", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-fox-movies-hd', name:"Fox Movies HD", group:"Movies", country:'Global', logo:"FOXM", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-fox-action-movies-hd', name:"Fox Action Movies HD", group:"Movies", country:'Global', logo:"FOXA", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-fox-family-movies-hd', name:"Fox Family Movies HD", group:"Movies", country:'Global', logo:"FOXF", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-box-office-1-hd', name:"Box Office 1 HD", group:"Movies", country:'Global', logo:"BOXO", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-box-office-2-hd', name:"Box Office 2 HD", group:"Movies", country:'Global', logo:"BOXO", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-box-office-3-hd', name:"Box Office 3 HD", group:"Movies", country:'Global', logo:"BOXO", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-box-office-4-hd', name:"Box Office 4 HD", group:"Movies", country:'Global', logo:"BOXO", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-box-office-5-hd', name:"Box Office 5 HD", group:"Movies", country:'Global', logo:"BOXO", url:'', color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:'catalog-bein-fatafeat-hd', name:"beIN Fatafeat HD", group:"Entertainment", country:'Global', logo:"BEIN", url:'', color:"linear-gradient(135deg,#0369a1,#7c3aed)" },
-  { id:'catalog-nat-geo-wild-hd', name:"Nat Geo Wild HD", group:"Entertainment", country:'Global', logo:"NATG", url:'', color:"linear-gradient(135deg,#0369a1,#7c3aed)" },
-  { id:'catalog-animal-planet-hd', name:"Animal Planet HD", group:"Entertainment", country:'Global', logo:"ANIM", url:'', color:"linear-gradient(135deg,#0369a1,#7c3aed)" },
-  { id:'catalog-dmax', name:"DMAX", group:"Entertainment", country:'Global', logo:"DMAX", url:'', color:"linear-gradient(135deg,#0369a1,#7c3aed)" },
-  { id:'catalog-bejunior', name:"beJunior", group:"Kids", country:'Global', logo:"BEJU", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
-  { id:'catalog-jeem-hd', name:"Jeem HD", group:"Kids", country:'Global', logo:"JEEM", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
-  { id:'catalog-baraem', name:"Baraem", group:"Kids", country:'Global', logo:"BARA", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
-  { id:'catalog-baby-tv', name:"Baby TV", group:"Kids", country:'Global', logo:"BABY", url:'', color:"linear-gradient(135deg,#db2777,#7c3aed)" },
-
-
   { id:"added-sony-one-blacklist", name:"Sony One: The Blacklist", group:"Entertainment", country:"Global", logo:"SONY", url:"https://06cb85ad6ccb4a6b97f561e62d16ad3f.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-822-FR-SONYONETHEBLACKLIST-LG_FR/playlist.m3u8", color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
   { id:"added-nickelodeon", name:"Nickelodeon", group:"Kids", country:"Global", logo:"NICK", url:"http://198.58.104.90:8989/nickelodeon/index.m3u8", color:"linear-gradient(135deg,#db2777,#7c3aed)" },
 ]
@@ -186,11 +162,6 @@ const starterChannels = [
   ...tamilChannels,
   ...sportsChannels,
   ...hindiChannels,
-  { id:'demo-1', name:'MALLU TV Demo', group:'Featured', country:'Global', logo:'M', url:'', note:'Add your own stream URL to start watching.', color:'linear-gradient(135deg,#1c87ff,#7c3aed)' },
-  { id:'demo-3', name:'World News', group:'News', country:'Global', logo:'N', url:'', note:'Sample channel placeholder', color:'linear-gradient(135deg,#dc2626,#fb923c)' },
-  { id:'demo-4', name:'Sports Arena', group:'Sports', country:'Global', logo:'S', url:'', note:'Sample channel placeholder', color:'linear-gradient(135deg,#ea580c,#eab308)' },
-  { id:'demo-5', name:'Cinema Plus', group:'Movies', country:'Global', logo:'C', url:'', note:'Sample channel placeholder', color:'linear-gradient(135deg,#9333ea,#ec4899)' },
-  { id:'demo-6', name:'Music Lounge', group:'Entertainment', country:'Global', logo:'♪', url:'', note:'Sample channel placeholder', color:'linear-gradient(135deg,#0891b2,#6366f1)' },
 ]
 
 const navItems = [
@@ -288,7 +259,7 @@ export default function App() {
   const fileRef = useRef(null)
 
   const importedChannels = useMemo(() => playlists.flatMap(p => p.channels || []), [playlists])
-  const allChannels = useMemo(() => [...starterChannels, ...importedChannels], [importedChannels])
+  const allChannels = useMemo(() => [...starterChannels, ...importedChannels].filter(c => typeof c.url === 'string' && c.url.trim()), [importedChannels])
   const channelGroups = useMemo(() => ['All channels', ...new Set(allChannels.map(c => c.group || 'Other'))], [allChannels])
   const filteredChannels = useMemo(() => {
     let items = allChannels
