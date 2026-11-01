@@ -174,6 +174,18 @@ const navItems = [
   { id:'recent', label:'Recently Watched', icon:Clock3 },
 ]
 
+const publicChannelPacks = [
+  { id:'pack-hindi', name:'Hindi Channels', group:'Hindi', description:'Hindi-language TV', url:'https://dearbulut.github.io/iptv/playlists/language/hin.m3u', icon:Globe2, color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
+  { id:'pack-tamil', name:'Tamil Channels', group:'Tamil', description:'Tamil-language TV', url:'https://dearbulut.github.io/iptv/playlists/language/tam.m3u', icon:Globe2, color:'linear-gradient(135deg,#0f766e,#2dd4bf)' },
+  { id:'pack-english', name:'English Channels', group:'English', description:'English-language TV', url:'https://dearbulut.github.io/iptv/playlists/language/eng.m3u', icon:Globe2, color:'linear-gradient(135deg,#1d4ed8,#60a5fa)' },
+  { id:'pack-entertainment', name:'Entertainment', group:'Entertainment', description:'General entertainment', url:'https://dearbulut.github.io/iptv/playlists/category/entertainment.m3u', icon:Tv, color:'linear-gradient(135deg,#7c3aed,#c084fc)' },
+  { id:'pack-movies', name:'Movies & Cinema', group:'Movies', description:'Movie channels', url:'https://dearbulut.github.io/iptv/playlists/category/movies.m3u', icon:Film, color:'linear-gradient(135deg,#9a3412,#fb923c)' },
+  { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Kids and animation channels', url:'https://dearbulut.github.io/iptv/playlists/category/kids.m3u', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
+  { id:'pack-sports', name:'Sports', group:'Sports', description:'Sports channels', url:'https://dearbulut.github.io/iptv/playlists/category/sports.m3u', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
+  { id:'pack-tamil-local', name:'Tamil Local TV', group:'Tamil Local', description:'Local Tamil cable channels', url:'https://tinyurl.com/amaze-tamil-local-tv-withproxy', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
+]
+
+
 function parseM3U(text, sourceName='Imported playlist') {
   const lines = text.replace(/^\uFEFF/, '').split(/\r?\n/).map(l => l.trim())
   const channels = []
@@ -368,6 +380,31 @@ export default function App() {
     }
   }
 
+  async function addChannelPack(pack) {
+    const existing = playlists.find(p => p.source === pack.url)
+    if (existing) {
+      setNotice(`${pack.name} is already in your playlist library.`)
+      setPage('live')
+      setCategory(pack.group)
+      return
+    }
+    setNotice(`Loading ${pack.name}…`)
+    try {
+      const response = await fetch(pack.url)
+      if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`)
+      const text = await response.text()
+      const parsed = parseM3U(text, pack.name)
+      if (!parsed.length) throw new Error('No channels were found in this playlist.')
+      const channels = parsed.map(channel => ({ ...channel, id: `${pack.id}-${channel.id}`, group: pack.group, color: pack.color }))
+      setPlaylists(old => old.some(p => p.source === pack.url) ? old : [...old, { id: crypto.randomUUID(), name: pack.name, source: pack.url, channels, addedAt: new Date().toISOString() }])
+      setPage('live')
+      setCategory(pack.group)
+      setNotice(`Added ${channels.length} channels from ${pack.name}. Some streams may be offline or unsupported in browsers.`)
+    } catch (err) {
+      setNotice(`Couldn't load ${pack.name}: ${err.message || 'Playlist unavailable'}. The source may block browser access (CORS). Try its playlist URL in an external player or download and import the M3U file.`)
+    }
+  }
+
   function importFile(file) {
     if (!file) return
     const reader = new FileReader()
@@ -505,6 +542,11 @@ export default function App() {
               <div><span className="stat-icon violet"><ListVideo size={17}/></span><span><strong>{playlists.length}</strong><small>Playlists</small></span></div>
               <div><span className="stat-icon pink"><Heart size={17}/></span><span><strong>{favorites.length}</strong><small>Favorites</small></span></div>
               <div className="stats-note"><span className="status-dot"/> Your library is stored on this device</div>
+            </section>
+            <section className="section channel-pack-section">
+              <div className="section-heading"><div><h2>Explore channel packs</h2><p>Add Hindi, Tamil, English, movies, cartoons and sports without changing your Malayalam list.</p></div><span className="section-count">PUBLIC PLAYLISTS</span></div>
+              <div className="channel-pack-grid">{publicChannelPacks.map(pack => { const Icon = pack.icon; const added = playlists.some(p => p.source === pack.url); return <article className="channel-pack-card" key={pack.id}><div className="channel-pack-icon" style={{background:pack.color}}><Icon size={21}/></div><div className="channel-pack-copy"><strong>{pack.name}</strong><span>{pack.description}</span></div><button className={added ? 'channel-pack-added' : ''} onClick={() => addChannelPack(pack)}>{added ? 'Added' : 'Add pack'}{added ? <CheckCircle2 size={14}/> : <Plus size={14}/>}</button></article> })}</div>
+              <p className="channel-pack-note"><Info size={14}/> Public playlists can change. Channels may be geo-restricted, offline, or blocked by their source; this app does not bypass DRM or provider access controls.</p>
             </section>
             <ChannelSection title="Jump into live TV" subtitle="Your channels, all in one place" channels={allChannels.slice(0, 8)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>
             <ChannelSection title="Explore by mood" subtitle="Find something worth watching" categories={true} onCategory={g => { setCategory(g); setPage('live') }} groups={channelGroups}/>
