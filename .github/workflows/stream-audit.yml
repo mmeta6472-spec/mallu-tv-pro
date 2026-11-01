@@ -71,26 +71,44 @@ jobs:
           def probe(c):
               row = {**c, 'http_status':'', 'playlist':'', 'segment_status':'', 'codecs':'', 'result':'', 'details':''}
               try:
-                  r = requests.get(c['url'], headers=headers, timeout=(3,5), allow_redirects=True)
+                  r = requests.get(c['url'], headers=headers, timeout=(3,5), allow_redirects=True, stream=True)
                   row['http_status'] = r.status_code
                   if r.status_code < 200 or r.status_code >= 300:
+                      r.close()
                       row['result'] = 'HTTP_ERROR'
                       row['details'] = 'Source returned HTTP ' + str(r.status_code)
                       return row
-                  body = r.text[:250000] if ('text' in r.headers.get('content-type','').lower() or c['url'].lower().split('?')[0].endswith(('.m3u8','.mpd','.m3u','.txt'))) else ''
+                  content_type = r.headers.get('content-type','').lower()
+                  is_manifest = ('mpegurl' in content_type or 'dash+xml' in content_type or 'text/' in content_type or c['url'].lower().split('?')[0].endswith(('.m3u8','.mpd','.m3u','.txt')))
+                  body = ''
+                  if is_manifest:
+                      chunks, total = [], 0
+                      for chunk in r.iter_content(chunk_size=8192):
+                          if chunk:
+                              chunks.append(chunk); total += len(chunk)
+                              if total >= 250000: break
+                      body = b''.join(chunks)[:250000].decode('utf-8','replace')
+                  r.close()
                   if '#EXTM3U' in body:
                       row['playlist'] = 'HLS'
                       lines = [x.strip() for x in body.splitlines() if x.strip()]
                       variant = next((lines[i+1] for i,x in enumerate(lines[:-1]) if x.startswith('#EXT-X-STREAM-INF') and not lines[i+1].startswith('#')), None)
                       media_url = urljoin(r.url, variant) if variant else r.url
                       if variant:
-                          vr = requests.get(media_url, headers=headers, timeout=(3,4), allow_redirects=True)
+                          vr = requests.get(media_url, headers=headers, timeout=(3,4), allow_redirects=True, stream=True)
                           if vr.status_code < 200 or vr.status_code >= 300:
+                              vr.close()
                               row['result'] = 'VARIANT_ERROR'
                               row['details'] = 'Master playlist OK, variant returned HTTP ' + str(vr.status_code)
                               return row
-                          lines = [x.strip() for x in vr.text[:250000].splitlines() if x.strip()]
+                          chunks, total = [], 0
+                          for chunk in vr.iter_content(chunk_size=8192):
+                              if chunk:
+                                  chunks.append(chunk); total += len(chunk)
+                                  if total >= 250000: break
+                          lines = [x.strip() for x in b''.join(chunks)[:250000].decode('utf-8','replace').splitlines() if x.strip()]
                           media_url = vr.url
+                          vr.close()
                       segment = next((x for x in lines if not x.startswith('#') and urlparse(x).path), None)
                       if segment:
                           seg_url = urljoin(media_url, segment)
