@@ -1,5 +1,6 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Hls from 'hls.js'
+import dashjs from 'dashjs'
 import {
   Search, Home, Radio, Trophy, Film, Newspaper, Heart, Clock3, Settings,
   Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight, ChevronDown,
@@ -182,7 +183,7 @@ const publicChannelPacks = [
   { id:'pack-movies', name:'Movies & Cinema', group:'Movies', description:'Movie channels', url:'https://dearbulut.github.io/iptv/playlists/category/movies.m3u', icon:Film, color:'linear-gradient(135deg,#9a3412,#fb923c)' },
   { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Kids and animation channels', url:'https://dearbulut.github.io/iptv/playlists/category/kids.m3u', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
   { id:'pack-sports', name:'Sports', group:'Sports', description:'Sports channels', url:'https://dearbulut.github.io/iptv/playlists/category/sports.m3u', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
-  { id:'pack-tamil-local', name:'Tamil Local TV', group:'Tamil Local', description:'Local Tamil cable channels', url:'https://tinyurl.com/amaze-tamil-local-tv', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
+  { id:'pack-tamil-local', name:'Tamil Local TV', group:'Tamil Local', description:'Local Tamil cable channels', url:'https://tinyurl.com/amaze-tamil-local-tv-withproxy', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
 ]
 
 
@@ -251,6 +252,7 @@ export default function App() {
   const [muted, setMuted] = useState(false)
   const [playing, setPlaying] = useState(false)
   const [quality, setQuality] = useState('Auto')
+  const [channelListLimit, setChannelListLimit] = useState(300)
   const [volume, setVolume] = useState(0.8)
   const [showSettings, setShowSettings] = useState(false)
   const videoRef = useRef(null)
@@ -272,9 +274,11 @@ export default function App() {
     return items
   }, [allChannels, page, favorites, recent, category, search])
 
-  useEffect(() => { localStorage.setItem('mallu-tv-playlists', JSON.stringify(playlists)) }, [playlists])
+  useEffect(() => { try { localStorage.setItem('mallu-tv-playlists', JSON.stringify(playlists)) } catch { setNotice('Your browser storage is full. Remove a large playlist or export your channel list before adding more.') } }, [playlists])
   useEffect(() => { localStorage.setItem('mallu-tv-favorites', JSON.stringify(favorites)) }, [favorites])
   useEffect(() => { localStorage.setItem('mallu-tv-recent', JSON.stringify(recent)) }, [recent])
+
+  useEffect(() => { setChannelListLimit(300) }, [page, category, search])
 
   useEffect(() => {
     const video = videoRef.current
@@ -289,9 +293,22 @@ export default function App() {
     video.load()
     setNotice('')
     const isHls = /\.m3u8($|[?#])/i.test(selected.url) || selected.url.toLowerCase().includes('.m3u8')
+    const isDash = /\.mpd($|[?#])/i.test(selected.url)
+    const isRtmp = /^rtmp(s)?:/i.test(selected.url)
     let mediaRecoveryUsed = false
     let networkRetries = 0
-    if (isHls && Hls.isSupported()) {
+    if (isRtmp) {
+      setNotice('This playlist entry uses RTMP, which browsers cannot play directly. Use an HTTPS/HLS playlist version or a provider-supported browser stream.')
+    } else if (isDash && dashjs.supportsMediaSource()) {
+      const dash = dashjs.MediaPlayer().create()
+      hlsRef.current = dash
+      dash.initialize(video, selected.url, true)
+      dash.updateSettings({ streaming: { buffer: { bufferTimeAtTopQuality: 20, bufferTimeAtTopQualityLongForm: 30 }, retryAttempts: { MPD: 3, MediaSegment: 4 }, retryIntervals: { MPD: 1000, MediaSegment: 1000 } } })
+      dash.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
+        video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start this DASH stream.'))
+      })
+      dash.on(dashjs.MediaPlayer.events.ERROR, () => setNotice('DASH playback failed. The stream may be offline, blocked by CORS, or use an unsupported codec.'))
+    } else if (isHls && Hls.isSupported()) {
       const hls = new Hls({
         enableWorker: true,
         capLevelToPlayerSize: true,
@@ -333,9 +350,11 @@ export default function App() {
         }
       })
     } else {
-      video.src = selected.url
-      video.load()
-      video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start, or check whether this stream format is supported by your browser.'))
+      if (!isRtmp && !(isDash && dashjs.supportsMediaSource())) {
+        video.src = selected.url
+        video.load()
+        video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start, or check whether this stream format is supported by your browser.'))
+      }
     }
     const onVideoError = () => {
       if (video.error) setNotice('Playback failed (' + video.error.code + '). Try another stream URL or browser-supported format.')
@@ -440,7 +459,7 @@ export default function App() {
     popup.document.open()
     popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MALLU TV PRO Player</title><style>
       *{box-sizing:border-box}body{margin:0;background:#070a12;color:#f4f6ff;font:14px system-ui,sans-serif}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#111827;border-bottom:1px solid #29334a}.brand{font-weight:800;letter-spacing:.4px}.brand span{color:#83a8ff}.name{color:#aab6cc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stage{height:calc(100vh - 112px);min-height:220px;display:grid;place-items:center;background:#02040a}video{width:100%;height:100%;object-fit:contain;background:#000}footer{display:flex;align-items:center;gap:10px;padding:12px 16px;color:#8d9bb5;font-size:12px}button,select{background:#182238;color:#eef3ff;border:1px solid #33415f;border-radius:7px;padding:8px 10px}#status{flex:1}#error{color:#ffb0bf}@media(max-width:500px){.top{padding:10px}.name{max-width:55vw}footer{flex-wrap:wrap}}
-    </style></head><body><header class="top"><div class="brand">MALLU TV <span>PRO</span></div><div class="name" id="channel-name"></div></header><main class="stage"><video id="video" controls autoplay playsinline></video></main><footer><button id="retry">Retry</button><button id="pip">Picture in picture</button><select id="quality" aria-label="Stream quality"><option value="-1">Auto quality</option></select><span id="status">Connecting…</span></footer><script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script><script>
+    </style></head><body><header class="top"><div class="brand">MALLU TV <span>PRO</span></div><div class="name" id="channel-name"></div></header><main class="stage"><video id="video" controls autoplay playsinline></video></main><footer><button id="retry">Retry</button><button id="pip">Picture in picture</button><select id="quality" aria-label="Stream quality"><option value="-1">Auto quality</option></select><span id="status">Connecting…</span></footer><script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script><script src="https://cdn.dashjs.org/latest/dash.all.min.js"></script><script>
       const streamUrl = ${JSON.stringify(selected.url).replace(/</g,'\\u003c')};
       const channelName = ${JSON.stringify(selected.name).replace(/</g,'\\u003c')};
       const video = document.getElementById('video'), status = document.getElementById('status'), quality = document.getElementById('quality');
@@ -449,7 +468,13 @@ export default function App() {
       function start() {
         if (hls) { hls.destroy(); hls = null; }
         video.pause(); video.removeAttribute('src'); video.load(); status.textContent = 'Connecting…';
-        if (/\\.m3u8($|[?#])/i.test(streamUrl) && window.Hls && Hls.isSupported()) {
+        if (/^rtmp(s)?:/i.test(streamUrl)) { status.innerHTML='<span id="error">RTMP streams cannot play directly in a browser. Use an HTTPS/HLS source.</span>'; return; }
+        if (/\\.mpd($|[?#])/i.test(streamUrl) && window.dashjs && dashjs.supportsMediaSource()) {
+          hls = dashjs.MediaPlayer().create(); hls.initialize(video,streamUrl,true);
+          hls.updateSettings({streaming:{buffer:{bufferTimeAtTopQuality:20,bufferTimeAtTopQualityLongForm:30},retryAttempts:{MPD:3,MediaSegment:4},retryIntervals:{MPD:1000,MediaSegment:1000}}});
+          hls.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED,()=>{status.textContent='DASH stream ready';video.play().catch(()=>status.textContent='Press Play to start')});
+          hls.on(dashjs.MediaPlayer.events.ERROR,()=>status.textContent='DASH playback failed: source, CORS or codec issue.');
+        } else if (/\\.m3u8($|[?#])/i.test(streamUrl) && window.Hls && Hls.isSupported()) {
           hls = new Hls({enableWorker:true, capLevelToPlayerSize:true, startLevel:-1, maxBufferLength:30, maxMaxBufferLength:60, backBufferLength:30, fragLoadingMaxRetry:4, fragLoadingRetryDelay:1000, manifestLoadingMaxRetry:3});
           hls.loadSource(streamUrl); hls.attachMedia(video);
           hls.on(Hls.Events.MANIFEST_PARSED, () => { status.textContent='Stream ready'; quality.innerHTML='<option value="-1">Auto quality</option>'; hls.levels.forEach((level,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(level.height?level.height+'p':'Level '+(i+1));quality.appendChild(o)}); video.play().catch(()=>status.textContent='Press Play to start'); });
@@ -566,7 +591,7 @@ export default function App() {
                 <div className="now-playing"><div className="channel-logo large" style={{background:selected.color}}>{selected.logo && selected.logo.length < 3 ? selected.logo : <Tv size={21}/>}</div><div className="now-title"><span>NOW PLAYING</span><h2>{selected.name}</h2><p>{selected.group} <b>·</b> {selected.country || 'Global'}</p></div><button className={`round-action ${favorites.includes(selected.id) ? 'favorited' : ''}`} onClick={() => toggleFavorite(selected)} title="Toggle favorite"><Heart size={18} fill={favorites.includes(selected.id) ? 'currentColor' : 'none'}/></button></div>
                 {notice && <div className="notice"><Info size={16}/><span>{notice}</span><button onClick={() => setNotice('')}><X size={15}/></button></div>}
               </div>
-              <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.map((c,i) => <ChannelRow key={c.id} channel={c} active={selected.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div></aside>
+              <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.slice(0, channelListLimit).map((c,i) => <ChannelRow key={c.id} channel={c} active={selected.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div>{filteredChannels.length > channelListLimit && <button className="load-more-channels" onClick={() => setChannelListLimit(n => Math.min(n + 300, filteredChannels.length))}>Load more channels ({filteredChannels.length - channelListLimit} remaining)</button>}</aside>
             </div>}
             {page !== 'live' && <ChannelSection title={filteredChannels.length ? `${filteredChannels.length} channels` : 'Nothing here yet'} subtitle={filteredChannels.length ? 'Select a channel to open it in the player.' : 'Import a playlist or save a channel as a favorite to see it here.'} channels={filteredChannels} onSelect={c => { selectChannel(c); setPage('live') }} selected={selected} favorites={favorites} onFavorite={toggleFavorite} emptyAction={() => setShowImport(true)}/>}
             {page === 'live' && <div className="epg-section"><button className="epg-toggle" onClick={() => setGuideOpen(!guideOpen)}><div><Clock3 size={17}/><strong>TV Guide</strong><span>Program information</span></div>{guideOpen ? <ChevronDown size={17}/> : <ChevronRight size={17}/>}</button>{guideOpen && <div className="epg-empty"><div className="epg-clock"><Clock3 size={22}/></div><div><strong>Your guide will appear here</strong><p>EPG data can be connected when your playlist or provider supplies compatible XMLTV guide information.</p></div><button className="text-button" onClick={() => setShowImport(true)}>Manage playlists <ChevronRight size={14}/></button></div>}</div>}
