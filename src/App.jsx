@@ -109,6 +109,8 @@ const tamilChannels = [
 ]
 
 const sportsChannels = [
+  { id:'sports-ten-cricket', name:'Ten Cricket', group:'Sports', country:'Global', logo:'TEN', url:'https://drk6xq0vhn.gpcdn.net/live/ten_cricket_hd_abr/live/ten_cricket_hd_720/chunks.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'sports-willow-hd', name:'Willow HD', group:'Sports', country:'Global', logo:'WIL', url:'https://warm-caverns-48629-92fab798385f.herokuapp.com/https://d36r8jifhgsk5j.cloudfront.net/Willow_TV540p.m3u8', color:'linear-gradient(135deg,#15803d,#0f766e)' },
   { id:'sports-bein-sports', name:'beIN Sports', group:'Sports', country:'Global', logo:'BEIN', url:'https://tvsen6.aynaott.com/beinsports/index.m3u8', color:'linear-gradient(135deg,#7c2d12,#ea580c)' },
   { id:'sports-bein-xtra', name:'beIN Sports Xtra', group:'Sports', country:'Global', logo:'BEIN+', url:'https://bein-esp-xumo.amagi.tv/playlistR720P.m3u8', color:'linear-gradient(135deg,#7c2d12,#ea580c)' },
   { id:'sports-ptv-sports-hd', name:'PTV Sports HD', group:'Sports', country:'Pakistan', logo:'PTV', url:'https://flussonic.defineatoz.com/PTV/index.m3u8', color:'linear-gradient(135deg,#15803d,#0f766e)' },
