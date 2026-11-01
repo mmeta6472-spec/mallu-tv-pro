@@ -491,7 +491,7 @@ export default function App() {
       quality.addEventListener('change',()=>{if(hls)hls.currentLevel=Number(quality.value)});
       video.addEventListener('playing',()=>status.textContent='Playing'); video.addEventListener('waiting',()=>status.textContent='Buffering…'); video.addEventListener('error',()=>{if(video.error)status.textContent='Playback error ('+video.error.code+'). Check the stream URL/format.'});
       document.getElementById('retry').addEventListener('click',()=>{retryCount=0;start()});
-      document.getElementById('pip').addEventListener('click',()=>{if(document.pictureInPictureEnabled&&video.requestPictureInPicture)video.requestPictureInPicture().catch(()=>status.textContent='Picture-in-picture is unavailable in this browser.')});
+      document.getElementById('pip').addEventListener('click',async()=>{if(!document.pictureInPictureEnabled||typeof video.requestPictureInPicture!=='function'){status.textContent='Picture-in-picture is not supported in this browser. Try Chrome or Edge.';return}if(video.readyState<2){status.textContent='Wait for the video to start, then click Picture in picture.';return}try{if(video.paused)await video.play();await video.requestPictureInPicture();status.textContent='Picture-in-picture active'}catch(error){status.textContent=error&&error.name==='NotAllowedError'?'Start playback first, then click Picture in picture.':'Picture-in-picture failed. Start playback and try again.'}});
       window.addEventListener('beforeunload',()=>{if(hls){if(typeof hls.destroy==='function')hls.destroy();else if(typeof hls.reset==='function')hls.reset()}}); start();
     </script></body></html>`)
     popup.document.close()
