@@ -183,7 +183,7 @@ const publicChannelPacks = [
   { id:'pack-movies', name:'Movies & Cinema', group:'Movies', description:'Movie channels', url:'https://dearbulut.github.io/iptv/playlists/category/movies.m3u', icon:Film, color:'linear-gradient(135deg,#9a3412,#fb923c)' },
   { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Kids and animation channels', url:'https://dearbulut.github.io/iptv/playlists/category/kids.m3u', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
   { id:'pack-sports', name:'Sports', group:'Sports', description:'Sports channels', url:'https://dearbulut.github.io/iptv/playlists/category/sports.m3u', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
-  { id:'pack-tamil-local', name:'Tamil Local TV', group:'Tamil Local', description:'Local Tamil cable channels', url:'https://tinyurl.com/amaze-tamil-local-tv-withproxy', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
+  { id:'pack-tamil-local', name:'Tamil Local TV · 700+ streams', group:'Tamil', description:'Local Tamil channels · HTTPS proxy playlist', url:'https://tinyurl.com/amaze-tamil-local-tv-withproxy', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
 ]
 
 
@@ -401,26 +401,31 @@ export default function App() {
 
   async function addChannelPack(pack) {
     const existing = playlists.find(p => p.source === pack.url)
-    if (existing) {
+    const isTamilLocal = pack.id === 'pack-tamil-local'
+    if (existing && !isTamilLocal) {
       setNotice(`${pack.name} is already in your playlist library.`)
       setPage('live')
       setCategory(pack.group)
       return
     }
-    setNotice(`Loading ${pack.name}…`)
+    setNotice(existing ? 'Refreshing the Tamil local playlist…' : `Loading ${pack.name}…`)
     try {
-      const response = await fetch(pack.url)
+      const response = await fetch(pack.url, { cache: 'no-store' })
       if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`)
-      const text = await response.text()
-      const parsed = parseM3U(text, pack.name)
-      if (!parsed.length) throw new Error('No channels were found in this playlist.')
+      const playlistText = await response.text()
+      const parsed = parseM3U(playlistText, pack.name)
+      if (!parsed.length) throw new Error('No playable channel entries were found in this playlist.')
       const channels = parsed.map(channel => ({ ...channel, id: `${pack.id}-${channel.id}`, group: pack.group, color: pack.color }))
-      setPlaylists(old => old.some(p => p.source === pack.url) ? old : [...old, { id: crypto.randomUUID(), name: pack.name, source: pack.url, channels, addedAt: new Date().toISOString() }])
+      setPlaylists(old => {
+        const found = old.some(p => p.source === pack.url)
+        if (found) return old.map(p => p.source === pack.url ? { ...p, name: pack.name, channels, addedAt: new Date().toISOString() } : p)
+        return [...old, { id: crypto.randomUUID(), name: pack.name, source: pack.url, channels, addedAt: new Date().toISOString() }]
+      })
       setPage('live')
       setCategory(pack.group)
-      setNotice(`Added ${channels.length} channels from ${pack.name}. Some streams may be offline or unsupported in browsers.`)
+      setNotice(`${channels.length} Tamil channels added/updated. Only entries with stream URLs are imported; some streams may be offline or region-restricted.`)
     } catch (err) {
-      setNotice(`Couldn't load ${pack.name}: ${err.message || 'Playlist unavailable'}. The source may block browser access (CORS). Try its playlist URL in an external player or download and import the M3U file.`)
+      setNotice(`Couldn't load ${pack.name}: ${err.message || 'Playlist unavailable'}. The source may block browser access (CORS). Try its HTTPS-proxy playlist in an external player or download and import the M3U file.`)
     }
   }
 
