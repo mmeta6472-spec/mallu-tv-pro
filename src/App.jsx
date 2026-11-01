@@ -221,7 +221,6 @@ const starterChannels = [
 ]
 
 const navItems = [
-  { id:'home', label:'Home', icon:Home },
   { id:'live', label:'Live TV', icon:Radio },
   { id:'favorites', label:'My Favorites', icon:Heart },
   { id:'recent', label:'Recently Watched', icon:Clock3 },
@@ -235,7 +234,6 @@ const publicChannelPacks = [
   { id:'pack-movies', name:'Movies & Cinema', group:'Movies', description:'Movie channels', url:'https://dearbulut.github.io/iptv/playlists/category/movies.m3u', icon:Film, color:'linear-gradient(135deg,#9a3412,#fb923c)' },
   { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Kids and animation channels', url:'https://dearbulut.github.io/iptv/playlists/category/kids.m3u', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
   { id:'pack-sports', name:'Sports', group:'Sports', description:'Sports channels', url:'https://dearbulut.github.io/iptv/playlists/category/sports.m3u', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
-  { id:'pack-tamil-local', name:'Tamil Local TV · 700+ streams', group:'Tamil', description:'Local Tamil channels · HTTPS proxy playlist', url:'https://tinyurl.com/amaze-tamil-local-tv-withproxy', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
 ]
 
 
@@ -286,7 +284,7 @@ function loadIds(key) {
 }
 
 export default function App() {
-  const [page, setPage] = useState('home')
+  const [page, setPage] = useState('live')
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [search, setSearch] = useState('')
   const [showImport, setShowImport] = useState(false)
@@ -453,14 +451,13 @@ export default function App() {
 
   async function addChannelPack(pack) {
     const existing = playlists.find(p => p.source === pack.url)
-    const isTamilLocal = pack.id === 'pack-tamil-local'
-    if (existing && !isTamilLocal) {
+    if (existing) {
       setNotice(`${pack.name} is already in your playlist library.`)
       setPage('live')
       setCategory(pack.group)
       return
     }
-    setNotice(existing ? 'Refreshing the Tamil local playlist…' : `Loading ${pack.name}…`)
+    setNotice(`Loading ${pack.name}…`)
     try {
       const response = await fetch(pack.url, { cache: 'no-store' })
       if (!response.ok) throw new Error(`Playlist request failed (${response.status}).`)
@@ -470,12 +467,12 @@ export default function App() {
       const channels = parsed.map(channel => ({ ...channel, id: `${pack.id}-${channel.id}`, group: pack.group, color: pack.color }))
       setPlaylists(old => {
         const found = old.some(p => p.source === pack.url)
-        if (found) return old.map(p => p.source === pack.url ? { ...p, name: pack.name, channels, addedAt: new Date().toISOString() } : p)
+        if (found) return old
         return [...old, { id: crypto.randomUUID(), name: pack.name, source: pack.url, channels, addedAt: new Date().toISOString() }]
       })
       setPage('live')
       setCategory(pack.group)
-      setNotice(`${channels.length} Tamil channels added/updated. Only entries with stream URLs are imported; some streams may be offline or region-restricted.`)
+      setNotice(`${channels.length} channels added. Some streams may be offline or region-restricted.`)
     } catch (err) {
       setNotice(`Couldn't load ${pack.name}: ${err.message || 'Playlist unavailable'}. The source may block browser access (CORS). Try its HTTPS-proxy playlist in an external player or download and import the M3U file.`)
     }
@@ -577,17 +574,17 @@ export default function App() {
       setNotice('Landscape rotation is controlled by your device. Enable auto-rotate, then turn your phone sideways.')
     }
   }
-  const currentLabel = navItems.find(n => n.id === page)?.label || 'Home'
+  const currentLabel = navItems.find(n => n.id === page)?.label || 'Live TV'
 
   return (
     <div className="app-shell">
       <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
-        <div className="brand" onClick={() => { setPage('home'); setSidebarOpen(false) }} role="button" tabIndex="0">
+        <div className="brand" onClick={() => { setPage('live'); setCategory('All channels'); setSidebarOpen(false) }} role="button" tabIndex="0">
           <div className="brand-mark"><Tv size={22} strokeWidth={2.5}/><span className="brand-dot"/></div>
           <div className="brand-name">MALLU TV <b>PRO</b><small>YOUR WORLD. YOUR TV.</small></div>
         </div>
         <div className="profile-chip"><div className="profile-avatar creator-avatar">A</div><div><strong>Ashilthalakkattu</strong><span>Creator · MALLU TV PRO</span></div><ChevronDown size={15}/></div>
-        <div className="nav-label">DISCOVER</div>
+        <div className="nav-label">WATCH</div>
         <nav className="main-nav">
           {navItems.map(item => {
             const Icon = item.icon
@@ -608,7 +605,7 @@ export default function App() {
       <main className="main-area">
         <header className="topbar">
           <button className="mobile-menu icon-button" onClick={() => setSidebarOpen(true)} aria-label="Open menu"><Menu size={21}/></button>
-          <div className="breadcrumb"><span>Discover</span><ChevronRight size={14}/><strong>{currentLabel}</strong></div>
+          <div className="breadcrumb"><strong>{currentLabel}</strong></div>
           <div className="top-actions">
             <label className="search-box"><Search size={17}/><input value={search} onChange={e => setSearch(e.target.value)} placeholder="Channels, shows, sports..." aria-label="Search channels"/><kbd>⌘ K</kbd></label>
             <button className="icon-button globe-button" title="Global availability"><Globe2 size={19}/></button>
