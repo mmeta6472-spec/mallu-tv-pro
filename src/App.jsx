@@ -14,7 +14,7 @@ const malayalamChannels = [
   { id:'ml-raj-musix', name:'Raj Musix Malayalam', group:'Malayalam', country:'India', logo:'♪', url:'https://mumt04.tangotv.in/m18aqlK4RAJMUSIXMALAYALAM/index.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
   { id:'ml-kerala-vision', name:'Kerala Vision', group:'Malayalam', country:'India', logo:'KV', url:'https://cdn.pishow.tv/ott/live/243/master.m3u8', color:'linear-gradient(135deg,#15803d,#65a30d)' },
   { id:'ml-asianet', name:'Asianet', group:'Malayalam', country:'India', logo:'A', url:'https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starasianet.smil/chunklist_b1928000.m3u8', color:'linear-gradient(135deg,#dc2626,#7f1d1d)' },
-  { id:'ml-surya-tv', name:'Surya TV', group:'Malayalam', country:'India', logo:'S', url:'https://d3dt6rg724ecr3.cloudfront.net/SuryaTv/SuryaTV-HDR10-IN-index.m3u8', color:'linear-gradient(135deg,#ea580c,#eab308)' },
+  { id:'ml-surya-tv', name:'Surya TV', group:'Malayalam', country:'India', logo:'S', url:'https://livestream10.sunnxt.com/DolbyVision/SuryaTV_HDR/SuryaTV_HDR_Endpoints/SuryaTV-HDR10-IN-index.m3u8', color:'linear-gradient(135deg,#ea580c,#eab308)' },
   { id:'ml-asianet-middle-east', name:'Asianet Middle East', group:'Malayalam', country:'UAE', logo:'A+', url:'https://mumt03.tangotv.in/Dsly5z3HASIANETMIDDLEEAST/index.m3u8', color:'linear-gradient(135deg,#b91c1c,#f97316)' },
   { id:'ml-asianet-samsung', name:'Asianet (Samsung feed)', group:'Malayalam', country:'India', logo:'A', url:'https://asianet-samsung.vgcdn.net/ptnr-monitoring/vglive-sk-906908/playlist.m3u8', color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
   { id:'ml-manorama-news', name:'Manorama News', group:'Malayalam', country:'India', logo:'MN', url:'https://cdn.pishow.tv/ott/live/463/master.m3u8', color:'linear-gradient(135deg,#1d4ed8,#38bdf8)' },
@@ -138,7 +138,7 @@ const dramaCartoonChannels = [
 ]
 
 const tamilChannels = [
-  { id:'ta-sun-tv', name:'Sun TV', group:'Tamil', country:'India', logo:'SUN', url:'https://d2px1d6ssc60fw.cloudfront.net/SunTV/SunTV-HDR10-IN-index.m3u8', color:'linear-gradient(135deg,#dc2626,#f97316)' },
+  { id:'ta-sun-tv', name:'Sun TV', group:'Tamil', country:'India', logo:'SUN', url:'https://livestream10.sunnxt.com/DolbyVision/SunTV_HDR/SunTV_HDR_Endpoints/SunTV-HDR10-IN-index.m3u8', color:'linear-gradient(135deg,#dc2626,#f97316)' },
   { id:'ta-prime-tv', name:'Prime TV', group:'Tamil', country:'India', logo:'PTV', url:'https://live.applelive.in/primetv/primetv/index.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
   { id:'ta-star-vijay-uk', name:'Star Vijay UK', group:'Tamil', country:'United Kingdom', logo:'VJ', url:'https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starvijayuk.smil/playlist.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
   { id:'ta-velavan-tv', name:'Velavan TV', group:'Tamil', country:'India', logo:'VT', url:'https://velavantv.sscloud7.in/live/velavantv/index.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
