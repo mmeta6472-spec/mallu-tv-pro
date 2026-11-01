@@ -46,6 +46,17 @@ const malayalamChannels = [
   { id:'ml-pishow-1510', name:'Malayalam Channel (PiShow 1510)', group:'Malayalam', country:'India', logo:'TV', url:'https://cdn.pishow.tv/ott/live/1510/master.m3u8', color:'linear-gradient(135deg,#475569,#2563eb)' },
   { id:'ml-pulari', name:'Pulari TV', group:'Malayalam', country:'India', logo:'P', url:'https://mumbai-edge.smartplaytv.in/PulariTV/index.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
   { id:'ml-pravasi', name:'Pravasi Channel', group:'Malayalam', country:'UAE', logo:'P', url:'https://m6gdavepdn93-hls-live.5centscdn.com/pravasi/d0dbe915091d400bd8ee7f27f0791303.sdp/playlist.m3u8', color:'linear-gradient(135deg,#0369a1,#0f766e)' },
+  { id:'ml-kcl-tv', name:'KCL TV', group:'Malayalam', country:'India', logo:'KCL', url:'https://kcltv.livebox.co.in/kclhls/live.m3u8', color:'linear-gradient(135deg,#0f766e,#2563eb)' },
+  { id:'ml-ccv', name:'CCV', group:'Malayalam', country:'India', logo:'CCV', url:'https://5a1178b42cc03.streamlock.net/8212/8212/playlist.m3u8', color:'linear-gradient(135deg,#475569,#0f766e)' },
+  { id:'ml-darshana-tv', name:'Darshana TV', group:'Malayalam', country:'India', logo:'D', url:'https://mumt04.tangotv.in/m18aqlK4DARSHANATV/index.m3u8', color:'linear-gradient(135deg,#7c3aed,#2563eb)' },
+  { id:'ml-goodness-tv', name:'Goodness TV', group:'Malayalam', country:'India', logo:'G', url:'https://mumt07.tangotv.in/zHjX9OFlGOODNESSTV/index.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
+  { id:'ml-kairali-arabia', name:'Kairali Arabia', group:'Malayalam', country:'UAE', logo:'KA', url:'https://mumt03.tangotv.in/Dsly5z3HKAIRALIARABIA/index.m3u8', color:'linear-gradient(135deg,#be123c,#fb7185)' },
+  { id:'ml-kairali-we', name:'Kairali We', group:'Malayalam', country:'India', logo:'KW', url:'https://streams.tangotv.in/WETV/ORIGIN/index.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
+  { id:'ml-kalika-tv', name:'Kalika TV', group:'Malayalam', country:'India', logo:'K', url:'http://server.applelive.in/kalikatv/kalikatv.m3u8', color:'linear-gradient(135deg,#be185d,#7c3aed)' },
+  { id:'ml-news18-kerala', name:'News18 Kerala', group:'Malayalam', country:'India', logo:'N18', url:'https://n18syndication.akamaized.net/bpk-tv/News18_Kerala_NW18_MOB/output01/master.m3u8', color:'linear-gradient(135deg,#1d4ed8,#38bdf8)' },
+  { id:'ml-powervision', name:'Powervision TV', group:'Malayalam', country:'India', logo:'PV', url:'https://mumbai-edge.smartplaytv.in/PowerVision/index.m3u8', color:'linear-gradient(135deg,#0369a1,#0f172a)' },
+  { id:'ml-real-news-kerala', name:'Real News Kerala', group:'Malayalam', country:'India', logo:'RNK', url:'https://bk7l298nyx53-hls-live.5centscdn.com/realnews/e7dee419f91aa9e65939d3677fb9c4f5.sdp/playlist.m3u8', color:'linear-gradient(135deg,#dc2626,#7f1d1d)' },
+  { id:'ml-shalom-global', name:'Shalom (Global)', group:'Malayalam', country:'Global', logo:'SH', url:'https://d28xtgmk9tfk6b.cloudfront.net/master.m3u8', color:'linear-gradient(135deg,#0f766e,#2563eb)' },
 ]
 
 const englishChannels = [
@@ -82,6 +93,33 @@ const englishChannels = [
   { id:"en-wurl-entertainment", name:"WURL Entertainment", group:"English", country:"Global", logo:"W", url:"https://connection3-ent-nz.samsung.wurl.tv/playlist.m3u8", color:"linear-gradient(135deg,#0369a1,#7c3aed)" },
 ]
 
+
+
+const englishMovieChannels = [
+  { id:'movie-30a-classic', name:'30A TV Classic Movies', group:'Movies', country:'United States', logo:'30A', url:'https://30a-tv.com/feeds/pzaz/30atvmovies.m3u8', color:'linear-gradient(135deg,#7c2d12,#ea580c)' },
+  { id:'movie-charge', name:'CHARGE!', group:'Movies', country:'United States', logo:'CH', url:'https://fast-channels.sinclairstoryline.com/CHARGE/index.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'movie-whiplash', name:'Whiplash Cinema', group:'Movies', country:'Global', logo:'WC', url:'https://cdn.whiplash.cc/whiplash-cinema/index.m3u8', color:'linear-gradient(135deg,#111827,#7c2d12)' },
+  { id:'movie-rakuten-action', name:'Rakuten TV Action Movies', group:'Movies', country:'United Kingdom', logo:'RA', url:'https://54045f0c40fd442c8b06df076aaf1e85.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6065/master.m3u8', color:'linear-gradient(135deg,#7f1d1d,#ea580c)' },
+  { id:'movie-rakuten-comedy', name:'Rakuten TV Comedy Movies', group:'Movies', country:'United Kingdom', logo:'RC', url:'https://9be783d652cd4b099cf63e1dc134c4a3.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6181/master.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
+  { id:'movie-rakuten-drama', name:'Rakuten TV Drama Movies', group:'Movies', country:'United Kingdom', logo:'RD', url:'https://fee09fd665814f51b939b6d106cf5f66.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6093/master.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'movie-rakuten-family', name:'Rakuten TV Family Movies', group:'Movies', country:'United Kingdom', logo:'RF', url:'https://e3207568b726401995c25670faaf32e4.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-6203/master.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
+  { id:'movie-rakuten-top', name:'Rakuten TV Top Movies', group:'Movies', country:'United Kingdom', logo:'RT', url:'https://0145451975a64b35866170fd2e8fa486.mediatailor.eu-west-1.amazonaws.com/v1/master/0547f18649bd788bec7b67b746e47670f558b6b2/production-LiveChannel-5987/master.m3u8', color:'linear-gradient(135deg,#7c2d12,#f97316)' },
+  { id:'movie-24hour', name:'24 Hour Free Movies', group:'Movies', country:'United States', logo:'24', url:'https://d1j2u714xk898n.cloudfront.net/scheduler/scheduleMaster/145.m3u8', color:'linear-gradient(135deg,#334155,#1d4ed8)' },
+  { id:'movie-artflix', name:'ARTFLIX Movie Classics', group:'Movies', country:'United States', logo:'AF', url:'https://amogonetworx-artflix-1-se.samsung.wurl.tv/playlist.m3u8', color:'linear-gradient(135deg,#7c2d12,#b45309)' },
+  { id:'movie-cine-romantico', name:'Cine Romantico', group:'Movies', country:'United States', logo:'CR', url:'https://d1si3n1st4nkgb.cloudfront.net/10502/88886011/hls/master.m3u8?ads.xumo_channelId=88886011', color:'linear-gradient(135deg,#be185d,#7c3aed)' },
+  { id:'movie-classic-cinema', name:'Classic Cinema', group:'Movies', country:'United States', logo:'CC', url:'https://rpn.bozztv.com/gusa/gusa-classiccinema/index.m3u8', color:'linear-gradient(135deg,#475569,#1e293b)' },
+  { id:'movie-dust', name:'DUST', group:'Movies', country:'United States', logo:'DUST', url:'https://dqi7ayt2o24fn.cloudfront.net/playlist.m3u8', color:'linear-gradient(135deg,#0f766e,#0e7490)' },
+  { id:'movie-filmrise-western', name:'FilmRise Western', group:'Movies', country:'United States', logo:'FW', url:'https://dz05z8iljgvbe.cloudfront.net/master.m3u8', color:'linear-gradient(135deg,#92400e,#78350f)' },
+  { id:'movie-frightflix', name:'FrightFlix', group:'Movies', country:'United States', logo:'FF', url:'https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=2229', color:'linear-gradient(135deg,#111827,#7f1d1d)' },
+  { id:'movie-gravitas', name:'Gravitas Movies', group:'Movies', country:'United States', logo:'GM', url:'https://d6dg3ebeih71x.cloudfront.net/Gravitas_Movies.m3u8', color:'linear-gradient(135deg,#1e3a8a,#7c3aed)' },
+  { id:'movie-maverick', name:'Maverick Black Cinema', group:'Movies', country:'United States', logo:'MBC', url:'https://maverick-maverick-black-cinema-3-us.roku.wurl.tv/playlist.m3u8', color:'linear-gradient(135deg,#111827,#475569)' },
+  { id:'movie-moviesphere', name:'MovieSphere', group:'Movies', country:'United States', logo:'MS', url:'https://amg00353-lionsgatestudio-moviesphere-xumo-zh5u0.amagi.tv/playlist.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'movie-moviesphere-gold', name:'MovieSphere Gold', group:'Movies', country:'United States', logo:'MSG', url:'https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01438-ewscrippscompan-ionmystery-tablo/playlist.m3u8', color:'linear-gradient(135deg,#92400e,#f59e0b)' },
+  { id:'movie-sony-movies', name:'Sony Movies', group:'Movies', country:'United States', logo:'SONY', url:'https://a-cdn.klowdtv.com/live1/smc_720p/playlist.m3u8', color:'linear-gradient(135deg,#111827,#dc2626)' },
+  { id:'movie-tcm', name:'TCM', group:'Movies', country:'United States', logo:'TCM', url:'https://turnerlive.warnermediacdn.com/hls/live/2023186/tcmeast/noslate/VIDEO_1_5128000.m3u8', color:'linear-gradient(135deg,#111827,#b45309)' },
+  { id:'movie-tvs-drivein', name:'TVS Drive In Movie', group:'Movies', country:'United States', logo:'TVS', url:'https://rpn.bozztv.com/gusa/gusa-tvsdriveinmovie/index.m3u8', color:'linear-gradient(135deg,#334155,#7c2d12)' },
+  { id:'movie-watch-it-scream', name:'Watch it Scream!', group:'Movies', country:'United States', logo:'WS', url:'https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=2246', color:'linear-gradient(135deg,#111827,#7c3aed)' },
+]
 
 const dramaCartoonChannels = [
   { id:'dc-cineverse', name:'Cineverse', group:'Drama & Cartoons', country:'Global', logo:'CV', url:'https://linear-900.frequency.stream/dist/cineverse/900/hls/master/playlist.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
@@ -132,6 +170,18 @@ const sportsChannels = [
   { id:"sports-live-a0ao", name:"Sports Channel A0AO", group:"Sports", country:"Global", logo:"A0AO", url:"http://158.172.155.130:8000/play/a0ao/index.m3u8", color:"linear-gradient(135deg,#334155,#2563eb)" },
   { id:"added-sony-one-blacklist", name:"Sony One: The Blacklist", group:"Entertainment", country:"Global", logo:"SONY", url:"https://06cb85ad6ccb4a6b97f561e62d16ad3f.mediatailor.us-west-2.amazonaws.com/v1/master/ba62fe743df0fe93366eba3a257d792884136c7f/LINEAR-822-FR-SONYONETHEBLACKLIST-LG_FR/playlist.m3u8", color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
   { id:"added-nickelodeon", name:"Nickelodeon", group:"Kids", country:"Global", logo:"NICK", url:"http://198.58.104.90:8989/nickelodeon/index.m3u8", color:"linear-gradient(135deg,#db2777,#7c3aed)" },
+  { id:'sports-cricket-gold', name:'Cricket Gold', group:'Sports', country:'Australia', logo:'CG', url:'https://streams2.sofast.tv/scheduler/scheduleMaster/418.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'sports-fox-news', name:'Fox Sports News', group:'Sports', country:'Australia', logo:'FOX', url:'https://skynewsau-live-premium.akamaized.net/hls/live/2105307/foxsportsnews/live_1080p.m3u8', color:'linear-gradient(135deg,#1d4ed8,#dc2626)' },
+  { id:'sports-redbull-uk', name:'Red Bull TV (UK)', group:'Sports', country:'United Kingdom', logo:'RB', url:'https://e7c8f7d5.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWdiX1JlZEJ1bGxUVi0xX0hMUw/playlist.m3u8', color:'linear-gradient(135deg,#dc2626,#111827)' },
+  { id:'sports-real-madrid-en', name:'Real Madrid TV English', group:'Sports', country:'Spain', logo:'RM', url:'https://rmtv.akamaized.net/hls/live/2043154/rmtv-en-web/bitrate_3.m3u8', color:'linear-gradient(135deg,#1d4ed8,#e2e8f0)' },
+  { id:'sports-fuel-emea', name:'FUEL TV', group:'Sports', country:'Portugal', logo:'FUEL', url:'https://amg01074-fueltv-fueltvemeaen-rakuten-b6j62.amagi.tv/hls/amagi_hls_data_rakutenAA-fueltvemeaen/CDN/master.m3u8', color:'linear-gradient(135deg,#0f766e,#2563eb)' },
+  { id:'sports-fifa-plus', name:'FIFA+', group:'Sports', country:'United Kingdom', logo:'FIFA', url:'https://f7ccf7fc.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLXB0X0ZJRkFQbHVzUG9ydHVndWVzZV9ITFM/playlist.m3u8', color:'linear-gradient(135deg,#1d4ed8,#0f172a)' },
+  { id:'sports-tennis-channel', name:'Tennis Channel', group:'Sports', country:'United States', logo:'TC', url:'https://cdn-uw2-prod.tsv2.amagi.tv/linear/amg01444-tennischannelth-tennischnlintl-lggb/playlist.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
+  { id:'sports-sportsgrid', name:'SportsGrid', group:'Sports', country:'United States', logo:'SG', url:'https://sportsgrid-tribal.amagi.tv/playlist.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'sports-stadium', name:'Stadium', group:'Sports', country:'United States', logo:'ST', url:'https://wurl120sports.global.transmit.live/hls/679a907dce42a042c23ace37/v1/stadium_gracenote/samsung_us/latest/main/hls/playlist.m3u8', color:'linear-gradient(135deg,#111827,#dc2626)' },
+  { id:'sports-willow-sports', name:'Willow Sports', group:'Sports', country:'United States', logo:'WIL', url:'https://d36r8jifhgsk5j.cloudfront.net/Willow_TV1080p.m3u8', color:'linear-gradient(135deg,#15803d,#0f766e)' },
+  { id:'sports-oman', name:'Oman Sports TV', group:'Sports', country:'Oman', logo:'OM', url:'https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/chunklist.m3u8', color:'linear-gradient(135deg,#15803d,#dc2626)' },
+  { id:'sports-unbeaten', name:'Unbeaten', group:'Sports', country:'United States', logo:'UB', url:'https://unbeaten-tcl.amagi.tv/playlist.m3u8', color:'linear-gradient(135deg,#0f766e,#1d4ed8)' },
 ]
 
 const hindiChannels = [
@@ -163,6 +213,7 @@ const hindiChannels = [
 const starterChannels = [
   ...malayalamChannels,
   ...englishChannels,
+  ...englishMovieChannels,
   ...dramaCartoonChannels,
   ...tamilChannels,
   ...sportsChannels,
