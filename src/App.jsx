@@ -1,6 +1,7 @@
 import React, { useEffect, useMemo, useRef, useState } from 'react'
 import Hls from 'hls.js'
 import dashjs from 'dashjs'
+import mpegts from 'mpegts.js'
 import {
   Search, Home, Radio, Trophy, Film, Newspaper, Heart, Clock3, Settings,
   Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight, ChevronDown,
@@ -345,11 +346,38 @@ export default function App() {
     setNotice('')
     const isHls = /\.m3u8($|[?#])/i.test(selected.url) || selected.url.toLowerCase().includes('.m3u8')
     const isDash = /\.mpd($|[?#])/i.test(selected.url)
+    const isFlv = /\.flv($|[?#])/i.test(selected.url)
+    const isMpegTs = /\.ts($|[?#])/i.test(selected.url)
     const isRtmp = /^rtmp(s)?:/i.test(selected.url)
+    const isRtsp = /^rtsp:/i.test(selected.url)
     let mediaRecoveryUsed = false
     let networkRetries = 0
-    if (isRtmp) {
-      setNotice('This playlist entry uses RTMP, which browsers cannot play directly. Use an HTTPS/HLS playlist version or a provider-supported browser stream.')
+    if (isRtmp || isRtsp) {
+      setNotice('This stream uses ' + (isRtmp ? 'RTMP' : 'RTSP') + ', which browsers cannot play directly. Use an authorized HLS (.m3u8), DASH (.mpd), or browser-compatible HTTPS stream version.')
+    } else if ((isFlv || isMpegTs) && mpegts.isSupported()) {
+      try {
+        const transport = mpegts.createPlayer({
+          type: isFlv ? 'flv' : 'mpegts',
+          isLive: true,
+          url: selected.url
+        }, {
+          enableWorker: true,
+          enableStashBuffer: false,
+          stashInitialSize: 128
+        })
+        hlsRef.current = transport
+        transport.attachMediaElement(video)
+        transport.on(mpegts.Events.ERROR, (type, detail) => {
+          setPlaying(false)
+          setNotice('MPEG-TS/FLV playback failed (' + detail + '). The source may be offline, blocked by CORS, or use an unsupported codec.')
+        })
+        transport.load()
+        transport.play().then(() => setPlaying(true)).catch(() => setNotice('Stream loaded. Press Play if playback does not start automatically.'))
+      } catch {
+        setNotice('This MPEG-TS/FLV stream could not be initialized. Try an HLS (.m3u8) or DASH (.mpd) version.')
+      }
+    } else if ((isFlv || isMpegTs) && !mpegts.isSupported()) {
+      setNotice('This browser does not support the MPEG-TS/FLV playback engine. Try HLS (.m3u8) or DASH (.mpd) instead.')
     } else if (isDash && dashjs.supportsMediaSource()) {
       const dash = dashjs.MediaPlayer().create()
       hlsRef.current = dash
@@ -412,7 +440,7 @@ export default function App() {
         }
       })
     } else {
-      if (!isRtmp && !(isDash && dashjs.supportsMediaSource())) {
+      if (!isRtmp && !isRtsp && !isFlv && !isMpegTs && !(isDash && dashjs.supportsMediaSource())) {
         video.src = selected.url
         video.load()
         video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start, or check whether this stream format is supported by your browser.'))
@@ -429,7 +457,7 @@ export default function App() {
             ? 'This stream format or URL is not supported by this browser.'
             : 'The stream could not be decoded.'
       setPlaying(false)
-      setNotice(detail + ' Try another channel or a browser-compatible HLS (.m3u8) or DASH (.mpd) stream.')
+      setNotice(detail + ' Try another channel or a browser-compatible HLS (.m3u8), DASH (.mpd), MPEG-TS (.ts), FLV, MP4, or WebM stream.')
     }
     const onWaiting = () => {
       if (!video.paused && video.readyState < 3) setNotice('Buffering stream…')
