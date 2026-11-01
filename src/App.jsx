@@ -14,7 +14,7 @@ const malayalamChannels = [
   { id:'ml-raj-musix', name:'Raj Musix Malayalam', group:'Malayalam', country:'India', logo:'♪', url:'https://mumt04.tangotv.in/m18aqlK4RAJMUSIXMALAYALAM/index.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
   { id:'ml-kerala-vision', name:'Kerala Vision', group:'Malayalam', country:'India', logo:'KV', url:'https://cdn.pishow.tv/ott/live/243/master.m3u8', color:'linear-gradient(135deg,#15803d,#65a30d)' },
   { id:'ml-asianet', name:'Asianet', group:'Malayalam', country:'India', logo:'A', url:'https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starasianet.smil/chunklist_b1928000.m3u8', color:'linear-gradient(135deg,#dc2626,#7f1d1d)' },
-  { id:'ml-surya-tv', name:'Surya TV', group:'Malayalam', country:'India', logo:'S', url:'https://d3dt6rg724ecr3.cloudfront.net/SuryaTv/SuryaTV-HDR10-IN-index.m3u8', color:'linear-gradient(135deg,#ea580c,#eab308)' },
+  { id:'ml-surya-tv', name:'Surya TV', group:'Malayalam', country:'India', logo:'S', url:'https://indo51.gcdn.co/MALYLAM-SuryaHD/index.m3u8', color:'linear-gradient(135deg,#ea580c,#eab308)' },
   { id:'ml-asianet-middle-east', name:'Asianet Middle East', group:'Malayalam', country:'UAE', logo:'A+', url:'https://mumt03.tangotv.in/Dsly5z3HASIANETMIDDLEEAST/index.m3u8', color:'linear-gradient(135deg,#b91c1c,#f97316)' },
   { id:'ml-asianet-samsung', name:'Asianet (Samsung feed)', group:'Malayalam', country:'India', logo:'A', url:'https://asianet-samsung.vgcdn.net/ptnr-monitoring/vglive-sk-906908/playlist.m3u8', color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
   { id:'ml-manorama-news', name:'Manorama News', group:'Malayalam', country:'India', logo:'MN', url:'https://cdn.pishow.tv/ott/live/463/master.m3u8', color:'linear-gradient(135deg,#1d4ed8,#38bdf8)' },
