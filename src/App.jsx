@@ -619,6 +619,29 @@ export default function App() {
     popup.focus()
   }
 
+  async function openSystemPictureInPicture() {
+    const video = videoRef.current
+    if (!selected?.url || !video) {
+      setNotice('Start a channel first, then open system picture-in-picture.')
+      return
+    }
+    try {
+      if (document.pictureInPictureElement === video && document.exitPictureInPicture) {
+        await document.exitPictureInPicture()
+        return
+      }
+      if (typeof video.requestPictureInPicture === 'function' && document.pictureInPictureEnabled) {
+        if (video.paused) await video.play()
+        await video.requestPictureInPicture()
+        setNotice('Picture-in-picture is active. Switch apps; keep this browser open.')
+        return
+      }
+      setNotice('This browser does not expose system Picture-in-Picture for this stream. Try Chrome, start playback, then use your phone Home button; if it still stops, Android/browser restrictions prevent background playback here.')
+    } catch (error) {
+      setNotice('Picture-in-picture could not start. Start playback first, allow autoplay/PiP for this browser, and try again.')
+    }
+  }
+
   function togglePlayback() {
     const video = videoRef.current
     if (!selected?.url) { setShowImport(true); setNotice('Import a playlist to start watching.'); return }
@@ -721,7 +744,7 @@ export default function App() {
                   <video ref={videoRef} playsInline controls={false} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onVolumeChange={e => { setMuted(e.target.muted); setVolume(e.target.volume) }}/>
                   {!selected?.url && <div className="player-empty"><div className="empty-tv"><Tv size={33}/><span className="empty-signal"/></div><span className="live-badge"><i/> LIVE PLAYER</span><h2>Ready when you are.</h2><p>Choose a channel with a stream URL, or import your M3U/M3U8 playlist.</p><button className="primary-button" onClick={() => setShowImport(true)}><Plus size={16}/> Import channels</button></div>}
                   {selected?.url && <div className="video-overlay-top"><span className="live-badge"><i/> LIVE</span><span className="quality-badge">{quality === 'Auto' ? 'AUTO' : quality}</span></div>}
-                  <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={() => setMiniPlayer(v => !v)} aria-label={miniPlayer ? "Close mini player" : "Open inbuilt picture in picture"} title={miniPlayer ? "Close mini player" : "Inbuilt picture in picture"}><PictureInPicture2 size={18}/></button><button onClick={landscapeMode} aria-label="Landscape mode" title="Open landscape mode"><MonitorPlay size={18}/></button><button onClick={fullscreen} aria-label="Fullscreen" title="Fullscreen"><Maximize size={18}/></button></div>
+                  <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={openSystemPictureInPicture} aria-label="Play outside app" title="System picture-in-picture (outside app)"><PictureInPicture2 size={18}/></button><button onClick={() => setMiniPlayer(v => !v)} aria-label={miniPlayer ? "Close mini player" : "Open in-app mini player"} title={miniPlayer ? "Close mini player" : "In-app mini player"}><PictureInPicture2 size={18}/></button><button onClick={landscapeMode} aria-label="Landscape mode" title="Open landscape mode"><MonitorPlay size={18}/></button><button onClick={fullscreen} aria-label="Fullscreen" title="Fullscreen"><Maximize size={18}/></button></div>
                 </div>
                 {selected && <div className="now-playing"><div className="channel-logo large" style={{background:selected.color}}>{selected.logo && selected.logo.length < 3 ? selected.logo : <Tv size={21}/>}</div><div className="now-title"><span>NOW PLAYING</span><h2>{selected.name}</h2><p>{selected.group} <b>·</b> {selected.country || 'Global'}</p></div><button className={`round-action ${favorites.includes(selected.id) ? 'favorited' : ''}`} onClick={() => toggleFavorite(selected)} title="Toggle favorite"><Heart size={18} fill={favorites.includes(selected.id) ? 'currentColor' : 'none'}/></button></div>}
                 {notice && <div className="notice"><Info size={16}/><span>{notice}</span><button onClick={() => setNotice('')}><X size={15}/></button></div>}
