@@ -275,23 +275,76 @@ export default function App() {
     video.pause()
     video.removeAttribute('src')
     video.load()
-    const isHls = /\.m3u8($|\?)/i.test(selected.url) || selected.url.includes('m3u8')
+    setNotice('')
+    const isHls = /\.m3u8($|[?#])/i.test(selected.url) || selected.url.toLowerCase().includes('.m3u8')
+    let mediaRecoveryUsed = false
+    let networkRetries = 0
     if (isHls && Hls.isSupported()) {
-      const hls = new Hls({ enableWorker: true, capLevelToPlayerSize: true })
+      const hls = new Hls({
+        enableWorker: true,
+        capLevelToPlayerSize: true,
+        startLevel: -1,
+        abrEwmaDefaultEstimate: 500000,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        backBufferLength: 30,
+        manifestLoadingTimeOut: 20000,
+        levelLoadingTimeOut: 20000,
+        fragLoadingTimeOut: 30000,
+        fragLoadingMaxRetry: 4,
+        fragLoadingRetryDelay: 1000,
+        fragLoadingMaxRetryTimeout: 8000,
+        manifestLoadingMaxRetry: 3,
+        levelLoadingMaxRetry: 3
+      })
       hlsRef.current = hls
       hls.loadSource(selected.url)
       hls.attachMedia(video)
-      hls.on(Hls.Events.MANIFEST_PARSED, () => video.play().then(() => setPlaying(true)).catch(() => {}))
+      hls.on(Hls.Events.MANIFEST_PARSED, () => {
+        video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start this stream. Some browsers block autoplay.'))
+      })
       hls.on(Hls.Events.ERROR, (_, data) => {
-        if (data.fatal) setNotice('This stream could not be played. Check the URL, stream availability, CORS, and provider permissions.')
+        if (!data.fatal) return
+        if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 2) {
+          networkRetries += 1
+          setNotice('Connection interrupted. Trying to reconnect…')
+          window.setTimeout(() => { if (hlsRef.current === hls) hls.startLoad() }, 1200 * networkRetries)
+        } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR && !mediaRecoveryUsed) {
+          mediaRecoveryUsed = true
+          setNotice('Recovering the media decoder…')
+          hls.recoverMediaError()
+        } else {
+          setPlaying(false)
+          setNotice('This stream is unavailable or unsupported. Check the URL, CORS, codec, and provider permissions.')
+          hls.destroy()
+          if (hlsRef.current === hls) hlsRef.current = null
+        }
       })
     } else {
       video.src = selected.url
-      video.play().then(() => setPlaying(true)).catch(() => {})
+      video.load()
+      video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start, or check whether this stream format is supported by your browser.'))
     }
+    const onVideoError = () => {
+      if (video.error) setNotice('Playback failed (' + video.error.code + '). Try another stream URL or browser-supported format.')
+    }
+    video.addEventListener('error', onVideoError)
     setRecent(old => [selected.id, ...old.filter(id => id !== selected.id)].slice(0, 30))
-    return () => { if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null } }
+    return () => {
+      video.removeEventListener('error', onVideoError)
+      if (hlsRef.current) { hlsRef.current.destroy(); hlsRef.current = null }
+    }
   }, [selected?.id, selected?.url])
+
+  useEffect(() => {
+    const hls = hlsRef.current
+    if (!hls || !hls.levels?.length) return
+    if (quality === 'Auto') { hls.currentLevel = -1; return }
+    const targetHeight = Number.parseInt(quality, 10)
+    const candidates = hls.levels.map((level, index) => ({ index, height: level.height || 0 }))
+    const exact = candidates.filter(level => level.height <= targetHeight).sort((a, b) => b.height - a.height)[0]
+    if (exact) hls.currentLevel = exact.index
+  }, [quality, selected?.id])
 
   useEffect(() => {
     if (videoRef.current) { videoRef.current.volume = volume; videoRef.current.muted = muted }
@@ -343,6 +396,41 @@ export default function App() {
     setPlaylists(old => old.filter(item => item.id !== id))
     if (p?.channels?.some(c => c.id === selected.id)) setSelected(starterChannels[0])
   }
+  function openPopupPlayer() {
+    if (!selected?.url) { setShowImport(true); setNotice('Choose a channel or import a playlist first.'); return }
+    const popup = window.open('', 'mallu-tv-pro-player', 'popup=yes,width=1100,height=720,resizable=yes,scrollbars=no')
+    if (!popup) { setNotice('Your browser blocked the pop-up. Allow pop-ups for this site and try again.'); return }
+    popup.document.open()
+    popup.document.write(`<!doctype html><html><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>MALLU TV PRO Player</title><style>
+      *{box-sizing:border-box}body{margin:0;background:#070a12;color:#f4f6ff;font:14px system-ui,sans-serif}.top{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:14px 18px;background:#111827;border-bottom:1px solid #29334a}.brand{font-weight:800;letter-spacing:.4px}.brand span{color:#83a8ff}.name{color:#aab6cc;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.stage{height:calc(100vh - 112px);min-height:220px;display:grid;place-items:center;background:#02040a}video{width:100%;height:100%;object-fit:contain;background:#000}footer{display:flex;align-items:center;gap:10px;padding:12px 16px;color:#8d9bb5;font-size:12px}button,select{background:#182238;color:#eef3ff;border:1px solid #33415f;border-radius:7px;padding:8px 10px}#status{flex:1}#error{color:#ffb0bf}@media(max-width:500px){.top{padding:10px}.name{max-width:55vw}footer{flex-wrap:wrap}}
+    </style></head><body><header class="top"><div class="brand">MALLU TV <span>PRO</span></div><div class="name" id="channel-name"></div></header><main class="stage"><video id="video" controls autoplay playsinline></video></main><footer><button id="retry">Retry</button><button id="pip">Picture in picture</button><select id="quality" aria-label="Stream quality"><option value="-1">Auto quality</option></select><span id="status">Connecting…</span></footer><script src="https://cdn.jsdelivr.net/npm/hls.js@1.5.18/dist/hls.min.js"></script><script>
+      const streamUrl = ${JSON.stringify(selected.url).replace(/</g,'\\u003c')};
+      const channelName = ${JSON.stringify(selected.name).replace(/</g,'\\u003c')};
+      const video = document.getElementById('video'), status = document.getElementById('status'), quality = document.getElementById('quality');
+      document.title = channelName + ' — MALLU TV PRO'; document.getElementById('channel-name').textContent = channelName;
+      let hls = null, retryCount = 0;
+      function start() {
+        if (hls) { hls.destroy(); hls = null; }
+        video.pause(); video.removeAttribute('src'); video.load(); status.textContent = 'Connecting…';
+        if (/\\.m3u8($|[?#])/i.test(streamUrl) && window.Hls && Hls.isSupported()) {
+          hls = new Hls({enableWorker:true, capLevelToPlayerSize:true, startLevel:-1, maxBufferLength:30, maxMaxBufferLength:60, backBufferLength:30, fragLoadingMaxRetry:4, fragLoadingRetryDelay:1000, manifestLoadingMaxRetry:3});
+          hls.loadSource(streamUrl); hls.attachMedia(video);
+          hls.on(Hls.Events.MANIFEST_PARSED, () => { status.textContent='Stream ready'; quality.innerHTML='<option value="-1">Auto quality</option>'; hls.levels.forEach((level,i)=>{const o=document.createElement('option');o.value=i;o.textContent=(level.height?level.height+'p':'Level '+(i+1));quality.appendChild(o)}); video.play().catch(()=>status.textContent='Press Play to start'); });
+          hls.on(Hls.Events.ERROR, (_,data) => { if(!data.fatal)return; if(data.type===Hls.ErrorTypes.NETWORK_ERROR && retryCount++<2){status.textContent='Reconnecting…';setTimeout(()=>hls&&hls.startLoad(),1200*retryCount)}else if(data.type===Hls.ErrorTypes.MEDIA_ERROR){status.textContent='Recovering media…';hls.recoverMediaError()}else status.innerHTML='<span id="error">Stream unavailable or blocked by its source.</span>'; });
+        } else {
+          video.src=streamUrl; video.load(); video.play().then(()=>status.textContent='Playing').catch(()=>status.textContent='Press Play, or this format may not be supported by your browser.');
+        }
+      }
+      quality.addEventListener('change',()=>{if(hls)hls.currentLevel=Number(quality.value)});
+      video.addEventListener('playing',()=>status.textContent='Playing'); video.addEventListener('waiting',()=>status.textContent='Buffering…'); video.addEventListener('error',()=>{if(video.error)status.textContent='Playback error ('+video.error.code+'). Check the stream URL/format.'});
+      document.getElementById('retry').addEventListener('click',()=>{retryCount=0;start()});
+      document.getElementById('pip').addEventListener('click',()=>{if(document.pictureInPictureEnabled&&video.requestPictureInPicture)video.requestPictureInPicture().catch(()=>status.textContent='Picture-in-picture is unavailable in this browser.')});
+      window.addEventListener('beforeunload',()=>{if(hls)hls.destroy()}); start();
+    </script></body></html>`)
+    popup.document.close()
+    popup.focus()
+  }
+
   function togglePlayback() {
     const video = videoRef.current
     if (!selected?.url) { setShowImport(true); setNotice('Import a playlist to start watching.'); return }
@@ -431,7 +519,7 @@ export default function App() {
                   <video ref={videoRef} playsInline controls={false} onPlay={() => setPlaying(true)} onPause={() => setPlaying(false)} onVolumeChange={e => { setMuted(e.target.muted); setVolume(e.target.volume) }}/>
                   {!selected?.url && <div className="player-empty"><div className="empty-tv"><Tv size={33}/><span className="empty-signal"/></div><span className="live-badge"><i/> LIVE PLAYER</span><h2>Ready when you are.</h2><p>Choose a channel with a stream URL, or import your M3U/M3U8 playlist.</p><button className="primary-button" onClick={() => setShowImport(true)}><Plus size={16}/> Import channels</button></div>}
                   {selected?.url && <div className="video-overlay-top"><span className="live-badge"><i/> LIVE</span><span className="quality-badge">{quality === 'Auto' ? 'AUTO' : quality}</span></div>}
-                  <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={fullscreen} aria-label="Fullscreen"><Maximize size={18}/></button></div>
+                  <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={openPopupPlayer} aria-label="Open pop-up player" title="Open pop-up player"><ExternalLink size={17}/></button><button onClick={fullscreen} aria-label="Fullscreen" title="Fullscreen"><Maximize size={18}/></button></div>
                 </div>
                 <div className="now-playing"><div className="channel-logo large" style={{background:selected.color}}>{selected.logo && selected.logo.length < 3 ? selected.logo : <Tv size={21}/>}</div><div className="now-title"><span>NOW PLAYING</span><h2>{selected.name}</h2><p>{selected.group} <b>·</b> {selected.country || 'Global'}</p></div><button className={`round-action ${favorites.includes(selected.id) ? 'favorited' : ''}`} onClick={() => toggleFavorite(selected)} title="Toggle favorite"><Heart size={18} fill={favorites.includes(selected.id) ? 'currentColor' : 'none'}/></button></div>
                 {notice && <div className="notice"><Info size={16}/><span>{notice}</span><button onClick={() => setNotice('')}><X size={15}/></button></div>}
