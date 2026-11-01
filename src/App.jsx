@@ -182,7 +182,7 @@ const publicChannelPacks = [
   { id:'pack-movies', name:'Movies & Cinema', group:'Movies', description:'Movie channels', url:'https://dearbulut.github.io/iptv/playlists/category/movies.m3u', icon:Film, color:'linear-gradient(135deg,#9a3412,#fb923c)' },
   { id:'pack-kids', name:'Kids & Cartoons', group:'Kids', description:'Kids and animation channels', url:'https://dearbulut.github.io/iptv/playlists/category/kids.m3u', icon:Tv, color:'linear-gradient(135deg,#a21caf,#f0abfc)' },
   { id:'pack-sports', name:'Sports', group:'Sports', description:'Sports channels', url:'https://dearbulut.github.io/iptv/playlists/category/sports.m3u', icon:Trophy, color:'linear-gradient(135deg,#166534,#4ade80)' },
-  { id:'pack-tamil-local', name:'Tamil Local TV', group:'Tamil Local', description:'Local Tamil cable channels', url:'https://tinyurl.com/amaze-tamil-local-tv-withproxy', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
+  { id:'pack-tamil-local', name:'Tamil Local TV', group:'Tamil Local', description:'Local Tamil cable channels', url:'https://tinyurl.com/amaze-tamil-local-tv', icon:Radio, color:'linear-gradient(135deg,#9f1239,#fb7185)' },
 ]
 
 
