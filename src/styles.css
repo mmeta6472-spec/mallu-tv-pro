@@ -15,3 +15,24 @@
 
 /* Large playlist performance: keep long channel libraries responsive */
 .load-more-channels{display:block;width:calc(100% - 20px);margin:12px 10px;padding:10px;border:1px solid #33415f;border-radius:9px;background:#18243a;color:#dce7ff;font-size:12px;cursor:pointer}.load-more-channels:hover{background:#253655}
+
+/* Professional polish and creator credit */
+.creator-avatar{font-family:Manrope,sans-serif;font-size:14px;letter-spacing:-.5px}
+.profile-chip{border-color:rgba(113,145,222,.22);background:linear-gradient(120deg,#171f32,#121725)}
+.profile-chip strong{font-size:11px;letter-spacing:.1px}
+.profile-chip span{font-size:9px;color:#93a2bf}
+.channel-pack-section{padding:22px;border:1px solid rgba(151,166,200,.13);border-radius:18px;background:linear-gradient(145deg,rgba(20,27,43,.72),rgba(13,17,29,.72))}
+.channel-pack-section .section-heading{align-items:flex-end;margin-bottom:17px}
+.channel-pack-section .section-heading h2{font-size:20px;letter-spacing:-.5px}
+.channel-pack-section .section-heading p{max-width:570px;font-size:12px;line-height:1.65}
+.channel-pack-card{min-height:83px;transition:transform .18s,border-color .18s,background .18s}
+.channel-pack-card:hover{transform:translateY(-2px);border-color:rgba(112,151,255,.42);background:linear-gradient(135deg,#172238,#101725)}
+.channel-pack-copy strong{font-size:12px;letter-spacing:.05px}
+.channel-pack-copy span{font-size:10px;line-height:1.45}
+.channel-pack-card>button{min-width:98px;font-weight:700;transition:background .18s,border-color .18s}
+.creator-credit{color:#7f8ba2;font-size:10px}
+.creator-credit strong{color:#c8d6ff;font-weight:700}
+.footer{row-gap:12px}
+.footer>div:last-child{flex-wrap:wrap}
+@media(max-width:850px){.main-area{padding:0 20px}.channel-pack-section{padding:17px}.channel-pack-section .section-heading h2{font-size:18px}}
+@media(max-width:600px){.main-area{padding:0 13px}.channel-pack-section{padding:14px;border-radius:14px}.channel-pack-section .section-heading{align-items:flex-start;gap:10px}.channel-pack-section .section-heading h2{font-size:17px}.channel-pack-section .section-heading p{font-size:11px}.channel-pack-card{min-height:75px}.channel-pack-card>button{min-width:91px;font-size:10px}.creator-credit{width:100%}}
