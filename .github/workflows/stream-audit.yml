@@ -122,6 +122,9 @@ jobs:
                   except subprocess.TimeoutExpired:
                       row['result'] = 'PROBE_TIMEOUT'
                       row['details'] = 'Source responds, but media probe exceeded 14 seconds'
+                  except FileNotFoundError:
+                      row['result'] = 'PROBE_UNAVAILABLE'
+                      row['details'] = 'ffprobe is unavailable; HTTP and playlist checks still apply'
               except requests.exceptions.Timeout:
                   row['result'] = 'TIMEOUT'
                   row['details'] = 'No HTTP response before timeout'
