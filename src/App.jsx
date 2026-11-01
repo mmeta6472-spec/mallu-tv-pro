@@ -3,7 +3,7 @@ import Hls from 'hls.js'
 import dashjs from 'dashjs'
 import {
   Search, Home, Radio, Trophy, Film, Newspaper, Heart, Clock3, Settings,
-  Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight,
+  Plus, Play, Pause, Volume2, VolumeX, Maximize, ChevronRight, ChevronDown,
   Upload, Link2, Trash2, X, Tv, Globe2, Menu, MonitorPlay, ListVideo,
   CheckCircle2, AlertCircle, ExternalLink, Info
 } from 'lucide-react'
