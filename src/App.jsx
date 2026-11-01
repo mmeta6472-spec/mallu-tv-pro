@@ -487,7 +487,7 @@ export default function App() {
       video.addEventListener('playing',()=>status.textContent='Playing'); video.addEventListener('waiting',()=>status.textContent='Buffering…'); video.addEventListener('error',()=>{if(video.error)status.textContent='Playback error ('+video.error.code+'). Check the stream URL/format.'});
       document.getElementById('retry').addEventListener('click',()=>{retryCount=0;start()});
       document.getElementById('pip').addEventListener('click',()=>{if(document.pictureInPictureEnabled&&video.requestPictureInPicture)video.requestPictureInPicture().catch(()=>status.textContent='Picture-in-picture is unavailable in this browser.')});
-      window.addEventListener('beforeunload',()=>{if(hls)hls.destroy()}); start();
+      window.addEventListener('beforeunload',()=>{if(hls){if(typeof hls.destroy==='function')hls.destroy();else if(typeof hls.reset==='function')hls.reset()}}); start();
     </script></body></html>`)
     popup.document.close()
     popup.focus()
