@@ -675,7 +675,7 @@ export default function App() {
     <div className="app-shell">
       <aside className={`sidebar ${sidebarOpen ? 'sidebar-open' : ''}`}>
         <div className="brand" onClick={() => { setPage('live'); setCategory('All channels'); setSidebarOpen(false) }} role="button" tabIndex="0">
-          <img className="brand-mark brand-logo-image" src="/mallu-tv-icon.svg" alt="MALLU TV logo" />
+          <img className="brand-mark brand-logo-image" src="/mallu-tv-icon-v2.svg" alt="MALLU TV logo" />
           <div className="brand-name">MALLU TV <b>PRO</b><small>YOUR WORLD. YOUR TV.</small></div>
         </div>
         <div className="profile-chip"><div className="profile-avatar creator-avatar">A</div><div><strong>Ashilthalakkattu</strong><span>Creator · MALLU TV PRO</span></div><ChevronDown size={15}/></div>
