@@ -61,8 +61,11 @@ jobs:
           ns = '{http://schemas.android.com/apk/res/android}'
           tree = ET.parse(path)
           root = tree.getroot()
-          root.set(ns + 'usesCleartextTraffic', 'true')
-          root.set(ns + 'banner', '@drawable/tv_banner')
+          application = root.find('application')
+          if application is None:
+              raise SystemExit('Android manifest has no application element')
+          application.set(ns + 'usesCleartextTraffic', 'true')
+          application.set(ns + 'banner', '@drawable/tv_banner')
 
           for feature in list(root.findall('uses-feature')):
               if feature.get(ns + 'name') in ('android.software.leanback', 'android.hardware.touchscreen'):
