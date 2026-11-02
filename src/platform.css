@@ -1,0 +1,21 @@
+/* Cross-device support: TV remote focus, keyboard navigation, safe areas and touch targets */
+:root { color-scheme: dark; }
+html { min-height: 100%; -webkit-text-size-adjust: 100%; text-size-adjust: 100%; }
+body { min-height: 100vh; min-height: 100dvh; padding-bottom: env(safe-area-inset-bottom); }
+button, a, input, select, [tabindex]:not([tabindex="-1"]) { -webkit-tap-highlight-color: transparent; }
+button, a, select { touch-action: manipulation; }
+button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible, [tabindex]:focus-visible {
+  outline: 3px solid #a4c0ff !important;
+  outline-offset: 3px;
+  box-shadow: 0 0 0 5px #5d85e744;
+}
+@media (hover: none) and (pointer: coarse) {
+  button, select, .channel-row, .channel-card, .channel-pack-card > button { min-height: 42px; }
+}
+@media (min-width: 1200px) and (pointer: coarse) {
+  button, select, .channel-row, .channel-pack-card > button { min-height: 46px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  html:focus-within { scroll-behavior: auto; }
+}
+.video-shell video { max-width: 100%; max-height: 100%; }
