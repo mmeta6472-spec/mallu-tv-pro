@@ -50,15 +50,44 @@ jobs:
       - name: Sync web assets
         run: npx cap sync android
 
-      - name: Allow HTTP playlist streams in Android WebView
+      - name: Enable Android TV launcher and HTTP stream compatibility
         run: |
           python3 - <<'PY'
           from pathlib import Path
-          p = Path('android/app/src/main/AndroidManifest.xml')
-          s = p.read_text()
-          s = s.replace('<application ', '<application android:usesCleartextTraffic="true" ', 1)
-          p.write_text(s)
+          import xml.etree.ElementTree as ET
+
+          path = Path('android/app/src/main/AndroidManifest.xml')
+          ET.register_namespace('android', 'http://schemas.android.com/apk/res/android')
+          ns = '{http://schemas.android.com/apk/res/android}'
+          tree = ET.parse(path)
+          root = tree.getroot()
+          root.set(ns + 'usesCleartextTraffic', 'true')
+          root.set(ns + 'banner', '@drawable/tv_banner')
+
+          for feature in list(root.findall('uses-feature')):
+              if feature.get(ns + 'name') in ('android.software.leanback', 'android.hardware.touchscreen'):
+                  root.remove(feature)
+          root.insert(0, ET.Element('uses-feature', {ns + 'name': 'android.software.leanback', ns + 'required': 'false'}))
+          root.insert(1, ET.Element('uses-feature', {ns + 'name': 'android.hardware.touchscreen', ns + 'required': 'false'}))
+
+          for activity in root.iter('activity'):
+              if activity.get(ns + 'name', '').endswith('MainActivity'):
+                  for filt in activity.findall('intent-filter'):
+                      categories = [c.get(ns + 'name') for c in filt.findall('category')]
+                      if 'android.intent.category.LAUNCHER' in categories and 'android.intent.category.LEANBACK_LAUNCHER' not in categories:
+                          filt.append(ET.Element('category', {ns + 'name': 'android.intent.category.LEANBACK_LAUNCHER'}))
+          path.write_text('<?xml version="1.0" encoding="utf-8"?>\n' + ET.tostring(root, encoding='unicode'))
           PY
+          mkdir -p android/app/src/main/res/drawable
+          cat > android/app/src/main/res/drawable/tv_banner.xml <<'XML'
+          <vector xmlns:android="http://schemas.android.com/apk/res/android"
+              android:width="320dp" android:height="180dp"
+              android:viewportWidth="320" android:viewportHeight="180">
+              <path android:fillColor="#080B14" android:pathData="M0,0h320v180h-320z"/>
+              <path android:fillColor="#172746" android:pathData="M26,28h268a12,12 0,0 1,12 12v100a12,12 0,0 1,-12 12h-268a12,12 0,0 1,-12 -12v-100a12,12 0,0 1,12 -12z"/>
+              <path android:fillColor="#91B3FF" android:pathData="M136,55l58,35 -58,35z"/>
+          </vector>
+          XML
 
       - name: Build debug APK
         working-directory: android
@@ -79,7 +108,7 @@ jobs:
           name: MALLU TV PRO Android APK (latest)
           body: |
             Latest automatically built Android APK for MALLU TV PRO.
-            This is a debug-signed APK for direct installation on Android.
+            Debug-signed APK for direct installation on Android phones and Android TV.
             Android may ask you to allow installing apps from your browser.
           files: android/app/build/outputs/apk/debug/app-debug.apk
           overwrite_files: true
