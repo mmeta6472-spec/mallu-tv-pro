@@ -9,8 +9,16 @@
   "orientation": "any",
   "background_color": "#080b14",
   "theme_color": "#080b14",
-  "categories": ["entertainment", "video"],
+  "categories": [
+    "entertainment",
+    "video"
+  ],
   "icons": [
-    { "src": "/mallu-tv-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+    {
+      "src": "/mallu-tv-icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
   ]
 }
