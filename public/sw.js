@@ -1,5 +1,5 @@
-const CACHE_NAME = 'mallu-tv-shell-v1'
-const SHELL = ['/','/manifest.webmanifest','/mallu-tv-icon.svg']
+const CACHE_NAME = 'mallu-tv-shell-v2'
+const SHELL = ['/','/manifest.webmanifest','/mallu-tv-icon-v2.svg']
 
 self.addEventListener('install', event => {
   event.waitUntil(caches.open(CACHE_NAME).then(cache => cache.addAll(SHELL)).then(() => self.skipWaiting()))
