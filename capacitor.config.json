@@ -1,0 +1,9 @@
+{
+  "appId": "com.mallutvpro.app",
+  "appName": "MALLU TV PRO",
+  "webDir": "dist",
+  "bundledWebRuntime": false,
+  "android": {
+    "allowMixedContent": true
+  }
+}
