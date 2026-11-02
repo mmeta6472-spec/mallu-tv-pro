@@ -1,0 +1,14 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512">
+<defs><linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#123b53"/><stop offset=".55" stop-color="#087e83"/><stop offset="1" stop-color="#062a48"/></linearGradient><linearGradient id="gold" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#fff0a8"/><stop offset=".5" stop-color="#e8b94e"/><stop offset="1" stop-color="#b77720"/></linearGradient></defs>
+<rect width="512" height="512" rx="112" fill="#071321"/>
+<circle cx="256" cy="226" r="190" fill="url(#bg)" stroke="url(#gold)" stroke-width="12"/>
+<circle cx="256" cy="226" r="169" fill="none" stroke="#b9e5df" stroke-width="3" opacity=".8"/>
+<path d="M180 234c21-28 45-43 76-43s55 15 76 43l-22 7c-12-16-30-25-54-25s-42 9-54 25z" fill="url(#gold)"/>
+<path d="M199 241h114l-10 34h-94z" fill="url(#gold)"/>
+<path d="M218 278h76l-10 15h-56z" fill="url(#gold)"/>
+<path d="M256 112c-22 27-24 47-9 62 8 8 18 9 27 3 15-11 14-30-1-50-5-6-10-11-17-15z" fill="url(#gold)"/>
+<path d="M254 149l-7 31 19-16z" fill="#fff4bd"/>
+<path d="M154 304h204" stroke="url(#gold)" stroke-width="5" stroke-linecap="round"/>
+<text x="256" y="348" text-anchor="middle" font-family="Arial,sans-serif" font-size="54" font-weight="900" letter-spacing="2" fill="#fff4d0">MALLU TV</text>
+<text x="256" y="377" text-anchor="middle" font-family="Arial,sans-serif" font-size="14" font-weight="700" letter-spacing="3" fill="#c9ece6">YOUR LOCAL CONNECTION</text>
+</svg>
