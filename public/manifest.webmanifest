@@ -1,0 +1,16 @@
+{
+  "id": "/",
+  "name": "MALLU TV PRO",
+  "short_name": "MALLU TV",
+  "description": "Live TV and playlist player",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "orientation": "any",
+  "background_color": "#080b14",
+  "theme_color": "#080b14",
+  "categories": ["entertainment", "video"],
+  "icons": [
+    { "src": "/mallu-tv-icon.svg", "sizes": "any", "type": "image/svg+xml", "purpose": "any maskable" }
+  ]
+}
