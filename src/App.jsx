@@ -138,66 +138,27 @@ const dramaCartoonChannels = [
 ]
 
 const tamilChannels = [
-  { id:'ta-sun-tv', name:'Sun TV', group:'Tamil', country:'India', logo:'SUN', url:'https://livestream10.sunnxt.com/DolbyVision/SunTV_HDR/SunTV_HDR_Endpoints/SunTV-HDR10-IN-index.m3u8', color:'linear-gradient(135deg,#dc2626,#f97316)' },
-  { id:'ta-prime-tv', name:'Prime TV', group:'Tamil', country:'India', logo:'PTV', url:'https://live.applelive.in/primetv/primetv/index.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
-  { id:'ta-star-vijay-uk', name:'Star Vijay UK', group:'Tamil', country:'United Kingdom', logo:'VJ', url:'https://da86m1sqpm3o0.cloudfront.net/28072023/smil:starvijayuk.smil/playlist.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
-  { id:'ta-velavan-tv', name:'Velavan TV', group:'Tamil', country:'India', logo:'VT', url:'https://velavantv.sscloud7.in/live/velavantv/index.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
+  // Reliable fallbacks from the maintained Amaze Tamil Local TV playlist.
+  { id:'ta-ntn-tv', name:'NTN TV', group:'Tamil', country:'India', logo:'NTN', url:'https://live.skystream.in/live/ntntv/index.m3u8', color:'linear-gradient(135deg,#1d4ed8,#0891b2)' },
   { id:'ta-moon-tv', name:'Moon TV', group:'Tamil', country:'India', logo:'MOON', url:'https://live.sscloud7.in/live/moontv/index.m3u8', color:'linear-gradient(135deg,#1e3a8a,#6366f1)' },
-  { id:'ta-zee-tamil-hd', name:'Zee Tamil HD', group:'Tamil', country:'India', logo:'ZEE', url:'https://d2o8pibksxtln6.cloudfront.net/live/media/Zee_Tamil_HD/hls/Zee_Tamil_HD.m3u8', color:'linear-gradient(135deg,#b91c1c,#ea580c)' },
-  { id:'ta-colors-tamil-hd', name:'Colors Tamil HD', group:'Tamil', country:'India', logo:'CT', url:'https://da86m1sqpm3o0.cloudfront.net/28072023/smil:colorstamilhd11.smil/playlist.m3u8', color:'linear-gradient(135deg,#7c3aed,#ec4899)' },,
-  { id:"ta-ntn-tv", name:"NTN TV", group:'Tamil', country:'India', logo:"NTN", url:"https://live.skystream.in/live/ntntv/index.m3u8", color:"linear-gradient(135deg,#1d4ed8,#0891b2)" },
-  { id:"ta-kumari-tv", name:"Kumari TV", group:'Tamil', country:'India', logo:"KT", url:"https://applelive.in/kumaritv/gvkumaritv/index.m3u8", color:"linear-gradient(135deg,#0f766e,#65a30d)" },
-  { id:"ta-sakthi-tv", name:"Sakthi TV", group:'Tamil', country:'India', logo:"ST", url:"https://live.sscloud7.in/live/sakthitv/index.m3u8", color:"linear-gradient(135deg,#dc2626,#f97316)" },
-  { id:"ta-dtv-coimbatore", name:"D TV Coimbatore", group:'Tamil', country:'India', logo:"DTV", url:"https://stream.d6-pro.com/dtv/live/video.m3u8", color:"linear-gradient(135deg,#334155,#64748b)" },
-  { id:"ta-tunes-6-music", name:"Tunes 6 Music", group:'Tamil', country:'India', logo:"♪", url:"https://stream.d6-pro.com/Tunes6music/live/video.m3u8", color:"linear-gradient(135deg,#7c3aed,#db2777)" },
-  { id:"ta-d-bhakthi", name:"D Bhakthi", group:'Tamil', country:'India', logo:"DB", url:"https://stream.d6-pro.com/dbhakhi/live/video.m3u8", color:"linear-gradient(135deg,#b45309,#ea580c)" },
-  { id:"ta-succes-tv", name:"Succes TV Tamil", group:'Tamil', country:'India', logo:"ST", url:"https://stream.onecloudlive.in/successtv/successtvhd/index.m3u8", color:"linear-gradient(135deg,#0f766e,#2563eb)" },
-  { id:"ta-pr-tv", name:"PR TV", group:'Tamil', country:'India', logo:"PR", url:"https://applelive.in/prtv/prtv/index.m3u8", color:"linear-gradient(135deg,#dc2626,#7f1d1d)" },
-  { id:"ta-thalapathy-tv", name:"Thalapathy TV", group:'Tamil', country:'India', logo:"TTV", url:"https://applelive.in/thalapathytv/thalapathytv/index.m3u8", color:"linear-gradient(135deg,#7c3aed,#db2777)" },
-  { id:"ta-riya-tv", name:"Riya TV", group:'Tamil', country:'India', logo:"RIYA", url:"https://applelive.in/riyatv/riyatv/index.m3u8", color:"linear-gradient(135deg,#be185d,#7c3aed)" },
-  { id:"ta-dark-tv", name:"Dark Television", group:'Tamil', country:'India', logo:"DTV", url:"https://applelive.in/darktv/darktv/index.m3u8", color:"linear-gradient(135deg,#334155,#0f172a)" },
-  { id:"ta-harin-tv", name:"Harin TV", group:'Tamil', country:'India', logo:"HTV", url:"https://ipcloud.live/harintv/harintvhd/index.m3u8", color:"linear-gradient(135deg,#0f766e,#65a30d)" },
-  { id:"ta-phoenix-tv", name:"Phoenix TV", group:'Tamil', country:'India', logo:"PHX", url:"https://stream.onecloudlive.in/phoenixtv/phoenixtv/index.m3u8", color:"linear-gradient(135deg,#ea580c,#b91c1c)" },
-  { id:"ta-nila-tv", name:"Nila TV Pannur", group:'Tamil', country:'India', logo:"NILA", url:"https://live.olidigital.in/nilatv/nilatv/index.m3u8", color:"linear-gradient(135deg,#0369a1,#7c3aed)" },
-  { id:"ta-jc-tv", name:"JC TV", group:'Tamil', country:'India', logo:"JC", url:"https://applelive.in/jctv/jctv/index.m3u8", color:"linear-gradient(135deg,#1d4ed8,#7c3aed)" },
-  { id:"ta-digital-tv", name:"Digital TV", group:'Tamil', country:'India', logo:"DTV", url:"https://applelive.in/digitaltv/digitaltv/index.m3u8", color:"linear-gradient(135deg,#0369a1,#0891b2)" },
-  { id:"ta-malar-tv", name:"Malar TV", group:'Tamil', country:'India', logo:"MTV", url:"https://sscloud7.com/live/malartv/index.m3u8", color:"linear-gradient(135deg,#db2777,#f97316)" },
-  { id:"ta-veera-tv", name:"Veera TV", group:'Tamil', country:'India', logo:"VT", url:"https://ipcloud.live/veeratv/veeratvhd/index.m3u8", color:"linear-gradient(135deg,#15803d,#65a30d)" },
-  { id:"ta-jothi-bala-tv", name:"Jothi Bala TV", group:'Tamil', country:'India', logo:"JB", url:"http://jothibalatv.phoenixcreations.online/jothibalatv/jothibalatv/index.m3u8", color:"linear-gradient(135deg,#b45309,#dc2626)" },
-  { id:"ta-thendral-tv-ambai", name:"Thendral TV Ambai", group:'Tamil', country:'India', logo:"TT", url:"http://thendraltv.phoenixcreations.online/thendraltv/thendraltv/index.m3u8", color:"linear-gradient(135deg,#0f766e,#2563eb)" },
-  { id:"ta-ntv-nellai", name:"NTV Nellai", group:'Tamil', country:'India', logo:"NTV", url:"http://ntv.phoenixcreations.online/ntv/ntv/index.m3u8", color:"linear-gradient(135deg,#1d4ed8,#0f766e)" },
-  { id:"ta-sky-media", name:"Sky Media", group:'Tamil', country:'India', logo:"SKY", url:"http://skymedia.phoenixcreations.online/skymedia/skymedia/index.m3u8", color:"linear-gradient(135deg,#334155,#64748b)" },
-  { id:"ta-magizh-tv", name:"Magizh TV", group:'Tamil', country:'India', logo:"MTV", url:"http://magizhtv.phoenixcreations.online/magizhtv/magizhtv/index.m3u8", color:"linear-gradient(135deg,#7c3aed,#2563eb)" },
-  { id:"ta-tamilnesan-tv", name:"Tamilnesan TV", group:'Tamil', country:'India', logo:"TN", url:"https://view.rcserver.in/tmp_hls14/tntv/index.m3u8", color:"linear-gradient(135deg,#0369a1,#0f766e)" },
-  { id:"ta-amma-vision", name:"Amma Vision", group:'Tamil', country:'India', logo:"AV", url:"https://view.rcserver.in/tmp_hls19/ammavision/index.m3u8", color:"linear-gradient(135deg,#b91c1c,#f97316)" },
-  { id:"ta-jayam-tv", name:"Jayam TV", group:'Tamil', country:'India', logo:"JTV", url:"https://view.rcserver.in/tmp_hls20/index.m3u8", color:"linear-gradient(135deg,#7c3aed,#2563eb)" },
-  { id:"ta-qmax-plus", name:"QMax Plus", group:'Tamil', country:'India', logo:"QMAX", url:"https://view.rcserver.in/tmp_hls22/qmaxtv/index.m3u8", color:"linear-gradient(135deg,#334155,#64748b)" },
-  { id:"ta-thirai-tv", name:"Thirai TV", group:'Tamil', country:'India', logo:"THIRAI", url:"https://live.apcloud.in/thiraitv/thiraitvhd/index.m3u8", color:"linear-gradient(135deg,#7c2d12,#ea580c)" },
-  { id:"ta-thirai-music", name:"Thirai Music", group:'Tamil', country:'India', logo:"♪", url:"https://live.apcloud.in/thiraimusic/thiraimusichd/index.m3u8", color:"linear-gradient(135deg,#db2777,#7c3aed)" },
-  { id:"ta-ramya-tv", name:"Ramya TV", group:'Tamil', country:'India', logo:"RTV", url:"http://live.brightmeltech.in/ramyatv/ramyatv.m3u8", color:"linear-gradient(135deg,#0f766e,#2563eb)" },
-  { id:"ta-raja-tv", name:"Raja TV", group:'Tamil', country:'India', logo:"RTV", url:"http://live.brightmeltech.in/rajatv/rajatv.m3u8", color:"linear-gradient(135deg,#b45309,#dc2626)" },
-  { id:"ta-v-tv", name:"V TV", group:'Tamil', country:'India', logo:"VTV", url:"https://applelive.in/vtv/vtv/index.m3u8", color:"linear-gradient(135deg,#1d4ed8,#7c3aed)" },
-  { id:"ta-jeyam-plus", name:"Jeyam Plus", group:'Tamil', country:'India', logo:"JP", url:"https://stream.singamcloud.in/jeyamplus/jeyamplus/index.m3u8", color:"linear-gradient(135deg,#0369a1,#0891b2)" },
-  { id:"ta-d-jeyam", name:"D Jeyam", group:'Tamil', country:'India', logo:"DJ", url:"https://stream.singamcloud.in/djeyam/djeyam/index.m3u8", color:"linear-gradient(135deg,#7c3aed,#db2777)" },
-  { id:"ta-tharani-tv", name:"Tharani TV", group:'Tamil', country:'India', logo:"TT", url:"https://singamcloud.in/tharanitvtvl/tharanitvtvl/index.m3u8", color:"linear-gradient(135deg,#0f766e,#65a30d)" },
-  { id:"ta-s-media", name:"S Media", group:'Tamil', country:'India', logo:"SM", url:"https://stream.onecloudlive.in/stv/stvhd/index.m3u8", color:"linear-gradient(135deg,#1d4ed8,#0891b2)" },
-  { id:"ta-raagam-friends", name:"Raagam Friend's TV", group:'Tamil', country:'India', logo:"RF", url:"https://stream.onecloudlive.in/raagamtv/raagamtvhd/index.m3u8", color:"linear-gradient(135deg,#7c3aed,#2563eb)" },
-  { id:"ta-super-tv", name:"Super TV", group:'Tamil', country:'India', logo:"STV", url:"https://stream.onecloudlive.in/superstartv/superstarhd/index.m3u8", color:"linear-gradient(135deg,#15803d,#65a30d)" },
-  { id:"ta-krn-tv", name:"KRN TV", group:'Tamil', country:'India', logo:"KRN", url:"https://stream.onecloudlive.in/krntv/krntvhd/index.m3u8", color:"linear-gradient(135deg,#dc2626,#7f1d1d)" },
-  { id:"ta-aramm-tv", name:"Aramm TV", group:'Tamil', country:'India', logo:"ATV", url:"https://singamcloud.in/arammtv/arammtv/index.m3u8", color:"linear-gradient(135deg,#b45309,#ea580c)" },
-  { id:"ta-fort-channels", name:"Fort Channels", group:'Tamil', country:'India', logo:"FC", url:"https://stream.onecloudlive.in/forttv/fortchannel/index.m3u8", color:"linear-gradient(135deg,#334155,#64748b)" },
-  { id:"ta-ak-tv", name:"AK TV", group:'Tamil', country:'India', logo:"AK", url:"https://stream.onecloudlive.in/aktvhd/aktv/index.m3u8", color:"linear-gradient(135deg,#0f766e,#2563eb)" },
-  { id:"ta-rv-tamil", name:"RV Tamil", group:'Tamil', country:'India', logo:"RV", url:"https://ipcloud.live/rvtv/rvtvhd/index.m3u8", color:"linear-gradient(135deg,#0369a1,#0f766e)" },
-  { id:"ta-solai-tv", name:"Solai TV", group:'Tamil', country:'India', logo:"SOLAI", url:"https://ipcloud.live/solaitv/solaihd/index.m3u8", color:"linear-gradient(135deg,#15803d,#65a30d)" },
-  { id:"ta-jeyam-plus-cbe", name:"Jeyam Plus Coimbatore", group:'Tamil', country:'India', logo:"JP", url:"https://ipcloud.live/mmtv/jeyamplus/index.m3u8", color:"linear-gradient(135deg,#0369a1,#0891b2)" },
-  { id:"ta-mallai-tv", name:"Mallai TV", group:'Tamil', country:'India', logo:"MTV", url:"https://rojatv.cloud/mallaitv/mallaitv/index.m3u8", color:"linear-gradient(135deg,#7c3aed,#2563eb)" },
-  { id:"ta-mm-tv", name:"MM TV", group:'Tamil', country:'India', logo:"MM", url:"https://ipcloud.live/mmtv/mmtvhd/index.m3u8", color:"linear-gradient(135deg,#1d4ed8,#0891b2)" },
-  { id:"ta-sri-kanchi-tv", name:"Sri Kanchi TV", group:'Tamil', country:'India', logo:"SK", url:"https://annainew.livebox.co.in/annaitamilhls/live.m3u8", color:"linear-gradient(135deg,#b45309,#dc2626)" },
-  { id:"ta-7star-tv", name:"7Star Television", group:'Tamil', country:'India', logo:"7★", url:"https://annainew.livebox.co.in/7startvhls/livestream.m3u8", color:"linear-gradient(135deg,#7c3aed,#2563eb)" },
-  { id:"ta-amma-tv", name:"Amma TV", group:'Tamil', country:'India', logo:"AMMA", url:"https://annainew.livebox.co.in/ammatvhls/live.m3u8", color:"linear-gradient(135deg,#b91c1c,#f97316)" },
-  { id:"ta-sri-sai-tv", name:"Sri Sai TV", group:'Tamil', country:'India', logo:"SS", url:"https://annainew.livebox.co.in/srisaihls/live.m3u8", color:"linear-gradient(135deg,#0f766e,#65a30d)" }
+  { id:'ta-sakthi-tv', name:'Sakthi TV', group:'Tamil', country:'India', logo:'ST', url:'https://live.sscloud7.in/live/sakthitv/index.m3u8', color:'linear-gradient(135deg,#dc2626,#f97316)' },
+  { id:'ta-prime-tv', name:'Prime TV', group:'Tamil', country:'India', logo:'PTV', url:'https://live.applelive.in/primetv/primetv/index.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
+  { id:'ta-harin-tv', name:'Harin TV', group:'Tamil', country:'India', logo:'HTV', url:'https://ipcloud.live/harintv/harintvhd/index.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
+  { id:'ta-phoenix-tv', name:'Phoenix TV', group:'Tamil', country:'India', logo:'PHX', url:'https://stream.onecloudlive.in/phoenixtv/phoenixtv/index.m3u8', color:'linear-gradient(135deg,#ea580c,#b91c1c)' },
+  { id:'ta-nila-tv', name:'Nila TV Pannur', group:'Tamil', country:'India', logo:'NILA', url:'https://live.olidigital.in/nilatv/nilatv/index.m3u8', color:'linear-gradient(135deg,#0369a1,#7c3aed)' },
+  { id:'ta-sana-tv', name:'Sana TV', group:'Tamil', country:'India', logo:'SANA', url:'https://stream.galaxyott.live/live/sanatv/index.m3u8', color:'linear-gradient(135deg,#0f766e,#65a30d)' },
+  { id:'ta-sana-plus', name:'Sana Plus', group:'Tamil', country:'India', logo:'SP', url:'https://galaxyott.live/hls/sanaplus.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
+  { id:'ta-ntc-tv', name:'NTC TV', group:'Tamil', country:'India', logo:'NTC', url:'https://galaxyott.live/hls/ntv.m3u8', color:'linear-gradient(135deg,#1d4ed8,#0891b2)' },
+  { id:'ta-ultimate-tv', name:'Ultimate TV', group:'Tamil', country:'India', logo:'UTV', url:'https://stream.galaxyott.live/live/utv/index.m3u8', color:'linear-gradient(135deg,#0f766e,#2563eb)' },
+  { id:'ta-suriya-tv', name:'Suriya TV', group:'Tamil', country:'India', logo:'SUR', url:'https://galaxyott.live/hls/suryatv.m3u8', color:'linear-gradient(135deg,#dc2626,#f97316)' },
+  { id:'ta-subin-tv', name:'Subin TV', group:'Tamil', country:'India', logo:'SUB', url:'https://stream.galaxyott.live/live/subintv/index.m3u8', color:'linear-gradient(135deg,#334155,#64748b)' },
+  { id:'ta-dharsan-tv', name:'Dharsan TV', group:'Tamil', country:'India', logo:'DH', url:'https://galaxyott.live/hls/dharshantv.m3u8', color:'linear-gradient(135deg,#b45309,#ea580c)' },
+  { id:'ta-suriyan-tv', name:'Suriyan TV', group:'Tamil', country:'India', logo:'SY', url:'https://stream.sscloud7.com/live/suriyantv/index.m3u8', color:'linear-gradient(135deg,#7c3aed,#2563eb)' },
+  { id:'ta-oli-tv', name:'Oli TV', group:'Tamil', country:'India', logo:'OLI', url:'https://live.olidigital.in/olitv/olitv/index.m3u8', color:'linear-gradient(135deg,#0369a1,#0891b2)' },
+  { id:'ta-time-tv', name:'Time TV', group:'Tamil', country:'India', logo:'TIME', url:'https://live.olidigital.in/timetv/timetv/index.m3u8', color:'linear-gradient(135deg,#15803d,#65a30d)' },
+  { id:'ta-rock-tv', name:'Rock TV', group:'Tamil', country:'India', logo:'ROCK', url:'https://apis.avmediawork.in/tvhls/rocktv.m3u8', color:'linear-gradient(135deg,#334155,#64748b)' },
+  { id:'ta-roja-tv', name:'Roja TV', group:'Tamil', country:'India', logo:'ROJA', url:'https://rojatv.cloud/rojatv/rojatv/index.m3u8', color:'linear-gradient(135deg,#b91c1c,#f97316)' },
 ]
-
 const sportsChannels = [
   { id:'sports-ten-cricket', name:'Ten Cricket', group:'Sports', country:'Global', logo:'TEN', url:'https://drk6xq0vhn.gpcdn.net/live/ten_cricket_hd_abr/live/ten_cricket_hd_720/chunks.m3u8', color:'linear-gradient(135deg,#1d4ed8,#7c3aed)' },
   { id:'sports-willow-hd', name:'Willow HD', group:'Sports', country:'Global', logo:'WIL', url:'https://warm-caverns-48629-92fab798385f.herokuapp.com/https://d36r8jifhgsk5j.cloudfront.net/Willow_TV540p.m3u8', color:'linear-gradient(135deg,#15803d,#0f766e)' },
@@ -279,7 +240,7 @@ const navItems = [
 ]
 
 const publicChannelPacks = [
-  { id:'pack-tamil', name:'Tamil Channels', group:'Tamil', description:'Health-checked Tamil streams', url:'https://dearbulut.github.io/iptv/api/v1/by-language/tam.json', format:'json', icon:Globe2, color:'linear-gradient(135deg,#0f766e,#2dd4bf)' },
+  { id:'pack-tamil', name:'Tamil Channels', group:'Tamil', description:'Health-checked Tamil streams', url:'https://raw.githubusercontent.com/amazeyourself/tamil-local-iptv/refs/heads/main/channels.m3u', icon:Globe2, color:'linear-gradient(135deg,#0f766e,#2dd4bf)' },
   { id:'pack-hindi', name:'Hindi Channels', group:'Hindi', description:'Health-checked Hindi streams', url:'https://dearbulut.github.io/iptv/api/v1/by-language/hin.json', format:'json', icon:Globe2, color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
   { id:'pack-english', name:'English Channels', group:'English', description:'Health-checked English streams', url:'https://dearbulut.github.io/iptv/api/v1/by-language/eng.json', format:'json', icon:Globe2, color:'linear-gradient(135deg,#1d4ed8,#60a5fa)' },
   { id:'pack-entertainment', name:'Entertainment', group:'Entertainment', description:'General entertainment', url:'https://dearbulut.github.io/iptv/playlists/category/entertainment.m3u', icon:Tv, color:'linear-gradient(135deg,#7c3aed,#c084fc)' },
@@ -346,6 +307,7 @@ export default function App() {
   const [playlistName, setPlaylistName] = useState('')
   const [importError, setImportError] = useState('')
   const [playlists, setPlaylists] = useState(loadSaved)
+  const [remoteTamilChannels, setRemoteTamilChannels] = useState([])
   const [favorites, setFavorites] = useState(loadIds('mallu-tv-favorites'))
   const [recent, setRecent] = useState(loadIds('mallu-tv-recent'))
   const [selected, setSelected] = useState(starterChannels[0])
@@ -362,8 +324,33 @@ export default function App() {
   const hlsRef = useRef(null)
   const fileRef = useRef(null)
 
+  // Load the maintained Tamil local-TV playlist in the background. The local fallback list
+  // remains available if the remote playlist is temporarily unreachable.
+  useEffect(() => {
+    const controller = new AbortController()
+    fetch('https://raw.githubusercontent.com/amazeyourself/tamil-local-iptv/refs/heads/main/channels.m3u', {
+      signal: controller.signal,
+      cache: 'no-cache'
+    })
+      .then(response => {
+        if (!response.ok) throw new Error('Tamil playlist request failed')
+        return response.text()
+      })
+      .then(text => {
+        const parsed = parseM3U(text, 'Amaze Tamil Local TV')
+        const playable = parsed
+          .filter(channel => /^https:\/\//i.test(channel.url) && /\.(m3u8|mpd)(?:[?#]|$)/i.test(channel.url))
+          .map(channel => ({ ...channel, id: 'amaze-' + channel.id, group: 'Tamil', country: 'India', source: 'Amaze Tamil Local TV' }))
+        if (playable.length) setRemoteTamilChannels(playable)
+      })
+      .catch(error => {
+        if (error.name !== 'AbortError') console.warn('Tamil playlist could not be refreshed; using built-in channels.', error)
+      })
+    return () => controller.abort()
+  }, [])
+
   const importedChannels = useMemo(() => playlists.flatMap(p => p.channels || []), [playlists])
-  const allChannels = useMemo(() => [...starterChannels, ...importedChannels].filter(c => typeof c.url === 'string' && c.url.trim()), [importedChannels])
+  const allChannels = useMemo(() => [...starterChannels, ...remoteTamilChannels, ...importedChannels].filter(c => typeof c.url === 'string' && c.url.trim()), [remoteTamilChannels, importedChannels])
   const channelGroups = useMemo(() => ['All channels', ...new Set(allChannels.map(c => c.group || 'Other'))], [allChannels])
   const filteredChannels = useMemo(() => {
     let items = allChannels
