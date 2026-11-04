@@ -121,7 +121,22 @@ const englishMovieChannels = [
   { id:'movie-tvs-drivein', name:'TVS Drive In Movie', group:'Movies', country:'United States', logo:'TVS', url:'https://rpn.bozztv.com/gusa/gusa-tvsdriveinmovie/index.m3u8', color:'linear-gradient(135deg,#334155,#7c2d12)' },
   { id:'movie-watch-it-scream', name:'Watch it Scream!', group:'Movies', country:'United States', logo:'WS', url:'https://stream-us-east-1.getpublica.com/playlist.m3u8?network_id=2246', color:'linear-gradient(135deg,#111827,#7c3aed)' },
 
-]
+,
+  {id:"movie-user-1",name:"Tubi Movies 1",group:"Movies",country:"Global",logo:"TM1",url:"https://aegis-cloudfront-1.tubi.video/651ee7d3-e75b-4748-be86-422d43ff24b6/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-2",name:"Tubi Movies 2",group:"Movies",country:"Global",logo:"TM2",url:"https://aegis-cloudfront-1.tubi.video/a1e671ae-d1c2-4e39-99c7-889e83056fd2/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-3",name:"Tubi Movies 3",group:"Movies",country:"Global",logo:"TM3",url:"https://aegis-cloudfront-1.tubi.video/01f6c149-449b-4248-8bda-2278799205ec/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-4",name:"Warner Channel",group:"Movies",country:"Global",logo:"WC",url:"https://cdn4.skygo.mn/live/disk1/Warner/HLSv3-FTA/Warner.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-5",name:"DensX Vision HD",group:"Movies",country:"Global",logo:"DVH",url:"https://op-group1-densxvisionhd-1.dens.tv/h/h18/index.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-6",name:"Tubi Movies 4",group:"Movies",country:"Global",logo:"TM4",url:"https://aegis-cloudfront-1.tubi.video/8b127a5b-3054-4f39-93a2-1c4aab9ef5ff/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-7",name:"ARTFLIX",group:"Movies",country:"Global",logo:"A",url:"https://amogonetworx-artflix-1-nl.samsung.wurl.tv/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-8",name:"Cinevault 80s",group:"Movies",country:"Global",logo:"C8",url:"https://gsn-cinevault-80s-2-us.roku.wurl.tv/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-10",name:"Tubi Movies 5",group:"Movies",country:"Global",logo:"TM5",url:"https://aegis-cloudfront-1.tubi.video/a0ad4b53-ab3a-48dd-be12-bc7f533c372c/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-11",name:"Festival Movies",group:"Movies",country:"Global",logo:"FM",url:"https://nosignal1.antenaplay.ro/hls/fb-festival-hd/index.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-13",name:"Great Movies",group:"Movies",country:"Global",logo:"GM",url:"https://amg01753-narrativeentert-greatmovies-samsunguk-7z6eh.amagi.tv/playlist/amg01753-narrativeentert-greatmovies-samsunguk/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-14",name:"Great Christmas Movies",group:"Movies",country:"Global",logo:"GCM",url:"https://amg01753-narrativeentert-greatchristmas-samsunguk-8atls.amagi.tv/playlist/amg01753-narrativeentert-greatchristmas-samsunguk/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-15",name:"Grjngo Westerns",group:"Movies",country:"Global",logo:"GW",url:"https://amogonetworx-grjngo-3-no.samsung.wurl.tv/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-18",name:"MCI Television",group:"Movies",country:"Global",logo:"MT",url:"https://video.ejeserver.com/live/mcitelevision.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"},
+  {id:"movie-user-19",name:"Streamhoster Cinema",group:"Movies",country:"Global",logo:"SC",url:"https://2-fss-2.streamhoster.com/pl_120/206858-4412962-1/playlist.m3u8",color:"linear-gradient(135deg,#7c2d12,#7c3aed)"}]
 
 const dramaCartoonChannels = [
   { id:'dc-cineverse', name:'Cineverse', group:'Drama & Cartoons', country:'Global', logo:'CV', url:'https://linear-900.frequency.stream/dist/cineverse/900/hls/master/playlist.m3u8', color:'linear-gradient(135deg,#7c3aed,#db2777)' },
@@ -197,7 +212,23 @@ const sportsChannels = [
   { id:'sports-oman', name:'Oman Sports TV', group:'Sports', country:'Oman', logo:'OM', url:'https://partneta.cdn.mgmlcdn.com/omsport/smil:omsport.stream.smil/chunklist.m3u8', color:'linear-gradient(135deg,#15803d,#dc2626)' },
   { id:'sports-unbeaten', name:'Unbeaten', group:'Sports', country:'United States', logo:'UB', url:'https://unbeaten-tcl.amagi.tv/playlist.m3u8', color:'linear-gradient(135deg,#0f766e,#1d4ed8)' },
 
-]
+,
+  {id:"sports-user-1",name:"BEK Prime",group:"Sports",country:"Global",logo:"BP",url:"https://cdn3.wowza.com/5/ZWQ1K2NYTmpFbGsr/BEK-WOWZA-1/smil:BEKPRIMEW.smil/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-2",name:"ESPN The Ocho",group:"Sports",country:"Global",logo:"ETO",url:"https://d3b6q2ou5kp8ke.cloudfront.net/ESPNTheOcho.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-3",name:"Fight Network",group:"Sports",country:"Global",logo:"FN",url:"https://a-cdn.klowdtv.com/live2/fight_720p/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-4",name:"FloSports Worldwide",group:"Sports",country:"Global",logo:"FW",url:"https://amg02278-amg02278c2-flosports-worldwide-9916.playouts.now.amagi.tv/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-5",name:"FloSports Channel 2",group:"Sports",country:"Global",logo:"FC2",url:"https://amg02278-amg02278c1-flosports-worldwide-7592.playouts.now.amagi.tv/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-6",name:"Glory Kickboxing",group:"Sports",country:"Global",logo:"GK",url:"https://6f972d29.wurl.com/master/f36d25e7e52f1ba8d7e56eb859c636563214f541/UmFrdXRlblRWLWV1X0dsb3J5S2lja2JveGluZ19ITFM/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-7",name:"Hard Knocks",group:"Sports",country:"Global",logo:"HK",url:"https://d3uyzhwvmemdyf.cloudfront.net/v1/master/9d062541f2ff39b5c0f48b743c6411d25f62fc25/HardKnocks-PLEX/121.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-8",name:"LSN",group:"Sports",country:"Global",logo:"L",url:"https://a-cdn.klowdtv.com/live2/lsn_720p/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-9",name:"Nautical Channel",group:"Sports",country:"Global",logo:"NC",url:"https://a-cdn.klowdtv.com/live2/nautical_720p/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-10",name:"MAVTV Fast",group:"Sports",country:"Global",logo:"MF",url:"https://amg00378-mavtv-amg00378c2-rakuten-us-1048.playouts.now.amagi.tv/playlist/amg00378-mavtvfast-motorsportsnetwork-rakutenus/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-11",name:"Free Live Sports EMEA",group:"Sports",country:"Global",logo:"FLSE",url:"https://amg00378-amg00378c4-freelivesports-emea-5637.playouts.now.amagi.tv/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-12",name:"Rally TV",group:"Sports",country:"Global",logo:"RT",url:"https://rally-tv-live.akamaized.net/hls/live/2117704/RallyTV-Pri/master.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-13",name:"Racing Stream",group:"Sports",country:"Global",logo:"RS",url:"https://636ffd31f0e12.streamlock.net/RacingStream1/RacingStream1/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-14",name:"TVS Turbo",group:"Sports",country:"Global",logo:"TT",url:"https://rpn.bozztv.com/gusa/gusa-tvsturbo/index.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-15",name:"Unbeaten",group:"Sports",country:"Global",logo:"U",url:"https://d1t5afz6qed3xk.cloudfront.net/Unbeaten.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"},
+  {id:"sports-user-16",name:"Motorsports Live",group:"Sports",country:"Global",logo:"ML",url:"https://amg00378-mavtv-amg00378c2-rakuten-us-1048.playouts.now.amagi.tv/playlist/amg00378-mavtvfast-motorsportsnetwork-rakutenus/playlist.m3u8",color:"linear-gradient(135deg,#1d4ed8,#0f766e)"}]
 
 const hindiChannels = [
   { id:'hindi-hindi-hits', name:'Hindi Hits', group:'Hindi', country:'India', logo:'HITS', url:'https://samitaorigin.tangotv.in/HINDIHITS/SAMITAORIGIN/index.m3u8', color:'linear-gradient(135deg,#b91c1c,#f59e0b)' },
