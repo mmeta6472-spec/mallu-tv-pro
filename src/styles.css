@@ -67,3 +67,8 @@
 .video-shell.mini-player-active:after{border-radius:14px}
 .video-shell.mini-player-active .player-controls{padding:22px 9px 8px}
 @media(max-width:600px){.simple-home{margin-top:15px;padding:25px 19px;min-height:0;border-radius:16px}.simple-home h1{font-size:36px;letter-spacing:-1.4px}.simple-home>p{font-size:11px}.library-summary{gap:17px;margin-top:25px}.library-summary strong{font-size:17px}.simple-playlists .section-heading{align-items:flex-start}.simple-playlist-item{padding:11px}.video-shell.mini-player-active{right:10px!important;bottom:10px!important;width:min(300px,calc(100vw - 20px))!important}}
+
+/* Clear, accessible stream recovery action */
+.notice .notice-retry{flex-shrink:0;align-self:center;padding:6px 10px;border:1px solid #7899df66;border-radius:7px;background:#29416d;color:#e5edff;font-size:10px;font-weight:700}
+.notice .notice-retry:hover{background:#35558d}
+@media(max-width:600px){.notice{align-items:flex-start;flex-wrap:wrap}.notice>span{min-width:calc(100% - 34px)}.notice .notice-retry{margin-left:24px}}
