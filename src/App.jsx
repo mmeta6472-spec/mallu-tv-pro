@@ -268,6 +268,7 @@ const starterChannels = [
 
 const navItems = [
   { id:'live', label:'Live TV', icon:Radio },
+  { id:'sports', label:'Sports Live', icon:Trophy },
   { id:'favorites', label:'My Favorites', icon:Heart },
   { id:'recent', label:'Recently Watched', icon:Clock3 },
 ]
@@ -429,6 +430,10 @@ export default function App() {
     const canUseNativeHls = isHls && Boolean(video.canPlayType('application/vnd.apple.mpegurl') || video.canPlayType('application/x-mpegURL'))
     if (isRtmp || isRtsp) {
       setNotice('This stream uses ' + (isRtmp ? 'RTMP' : 'RTSP') + ', which browsers cannot play directly. Use an authorized HLS (.m3u8), DASH (.mpd), or browser-compatible HTTPS stream version.')
+    } else if (isDash && !dashjs.supportsMediaSource()) {
+      setNotice('This device browser cannot play MPEG-DASH (.mpd). Try the channel’s HLS (.m3u8) version or open it in a compatible browser.')
+    } else if (isHls && !Hls.isSupported() && !canUseNativeHls) {
+      setNotice('This browser does not support HLS playback for this stream. Try Chrome, Edge, Firefox, or a device with native HLS support.')
     } else if ((isFlv || isMpegTs) && mpegts.isSupported()) {
       try {
         const transport = mpegts.createPlayer({
@@ -465,7 +470,10 @@ export default function App() {
       dash.on(dashjs.MediaPlayer.events.STREAM_INITIALIZED, () => {
         video.play().then(() => setPlaying(true)).catch(() => setNotice('Press Play to start this DASH stream.'))
       })
-      dash.on(dashjs.MediaPlayer.events.ERROR, () => setNotice('DASH playback failed. The stream may be offline, blocked by CORS, or use an unsupported codec.'))
+      dash.on(dashjs.MediaPlayer.events.ERROR, () => {
+        setPlaying(false)
+        setNotice('DASH playback failed. The stream may be offline, blocked by CORS, or use an unsupported codec. Try Retry or another channel.')
+      })
     } else if (isHls && Hls.isSupported()) {
       const hls = new Hls({
         enableWorker: true,
@@ -829,7 +837,7 @@ export default function App() {
           </>
         ) : (
           <section className="content-page">
-            <div className="page-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> MALLU TV PRO</div><h1>{currentLabel}</h1><p>{page === 'live' ? 'Browse your imported channels and tune in.' : page === 'favorites' ? 'Your saved channels in one place.' : page === 'recent' ? 'Pick up where you left off.' : 'Explore channels from your personal library.'}</p></div><button className="primary-button compact" onClick={() => setShowImport(true)}><Plus size={16}/> Add playlist</button></div>
+            <div className="page-heading"><div><div className="eyebrow"><span className="eyebrow-line"/> MALLU TV PRO</div><h1>{currentLabel}</h1><p>{page === 'live' ? 'Browse your channels and tune in.' : page === 'sports' ? 'Live sports channels, match coverage and sports streams.' : page === 'favorites' ? 'Your saved channels in one place.' : page === 'recent' ? 'Pick up where you left off.' : 'Explore channels from your personal library.'}</p></div><button className="primary-button compact" onClick={() => setShowImport(true)}><Plus size={16}/> Add playlist</button></div>
             {page === 'live' && <div className="category-tabs">{channelGroups.map(g => <button key={g} className={category === g ? 'selected' : ''} onClick={() => setCategory(g)}>{g}</button>)}</div>}
             {page === 'live' && <div className="live-layout">
               <div className="player-column">
@@ -844,6 +852,16 @@ export default function App() {
               </div>
               <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.slice(0, channelListLimit).map((c,i) => <ChannelRow key={c.id} channel={c} active={selected?.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div>{filteredChannels.length > channelListLimit && <button className="load-more-channels" onClick={() => setChannelListLimit(n => Math.min(n + 300, filteredChannels.length))}>Load more ({filteredChannels.length - channelListLimit} remaining)</button>}</aside>
             </div>}
+            {page === 'sports' && <section className="sports-live-hero">
+              <div className="sports-live-glow"/>
+              <div className="sports-live-icon"><Trophy size={25}/></div>
+              <div className="sports-live-copy">
+                <span className="sports-live-kicker"><i/> LIVE SPORTS HUB</span>
+                <h2>Every match. One place.</h2>
+                <p>{filteredChannels.length} sports streams in your library. Select a channel to start watching, or add the health-checked Sports collection from Home.</p>
+              </div>
+              <button className="sports-live-add" onClick={() => setPage('home')}><Plus size={16}/> Add sports channels</button>
+            </section>}
             {page !== 'live' && <ChannelSection title={filteredChannels.length ? `${filteredChannels.length} channels` : 'Nothing here yet'} subtitle={filteredChannels.length ? 'Select a channel to open it in the player.' : 'Import a playlist or save a channel as a favorite to see it here.'} channels={filteredChannels} onSelect={c => { selectChannel(c); setPage('live') }} selected={selected} favorites={favorites} onFavorite={toggleFavorite} emptyAction={() => setShowImport(true)}/>}
             {page === 'live' && filteredChannels.some(c => c.id !== selected?.id) && <ChannelSection title="More to explore" subtitle="More channels in this category" channels={filteredChannels.filter(c => c.id !== selected?.id).slice(0,6)} onSelect={selectChannel} selected={selected} favorites={favorites} onFavorite={toggleFavorite}/>} 
           </section>
