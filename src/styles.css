@@ -72,3 +72,17 @@
 .notice .notice-retry{flex-shrink:0;align-self:center;padding:6px 10px;border:1px solid #7899df66;border-radius:7px;background:#29416d;color:#e5edff;font-size:10px;font-weight:700}
 .notice .notice-retry:hover{background:#35558d}
 @media(max-width:600px){.notice{align-items:flex-start;flex-wrap:wrap}.notice>span{min-width:calc(100% - 34px)}.notice .notice-retry{margin-left:24px}}
+
+
+/* Dedicated live-sports landing section */
+.sports-live-hero{position:relative;isolation:isolate;overflow:hidden;display:flex;align-items:center;gap:18px;margin:8px 0 24px;padding:22px 24px;border:1px solid rgba(92,178,128,.28);border-radius:18px;background:linear-gradient(115deg,#10251f 0%,#101b27 55%,#11182a 100%)}
+.sports-live-glow{position:absolute;z-index:-1;width:300px;height:300px;right:8%;top:-190px;border-radius:50%;background:radial-gradient(circle,#28a86b55,transparent 68%);filter:blur(5px)}
+.sports-live-icon{width:54px;height:54px;display:grid;place-items:center;flex-shrink:0;border:1px solid #54b77b55;border-radius:15px;background:linear-gradient(145deg,#176b45,#164b3d);color:#c9ffe0}
+.sports-live-copy{flex:1;min-width:0}
+.sports-live-kicker{display:flex;align-items:center;gap:7px;color:#91d8ae;font-size:9px;font-weight:800;letter-spacing:1.5px}
+.sports-live-kicker i{width:7px;height:7px;border-radius:50%;background:#4ade80;box-shadow:0 0 12px #4ade80}
+.sports-live-copy h2{margin:7px 0 5px;color:#f0fff5;font:800 clamp(19px,2.3vw,27px)/1.15 Manrope,sans-serif;letter-spacing:-.7px}
+.sports-live-copy p{max-width:640px;margin:0;color:#a5b8b0;font-size:11px;line-height:1.65}
+.sports-live-add{display:flex;align-items:center;justify-content:center;gap:7px;min-height:42px;padding:0 14px;border:1px solid #4a9b6a88;border-radius:9px;background:#1d6944;color:#effff4;font-size:11px;font-weight:750;white-space:nowrap;cursor:pointer}
+.sports-live-add:hover{background:#258253}
+@media(max-width:650px){.sports-live-hero{align-items:flex-start;flex-wrap:wrap;gap:12px;padding:16px}.sports-live-icon{width:44px;height:44px;border-radius:12px}.sports-live-copy{flex-basis:calc(100% - 60px)}.sports-live-copy h2{font-size:20px}.sports-live-add{width:100%}}
