@@ -351,6 +351,7 @@ export default function App() {
   const [quality, setQuality] = useState('Auto')
   const [channelListLimit, setChannelListLimit] = useState(100)
   const [miniPlayer, setMiniPlayer] = useState(false)
+  const [playbackAttempt, setPlaybackAttempt] = useState(0)
   const [volume, setVolume] = useState(0.8)
   const [showSettings, setShowSettings] = useState(false)
   const videoRef = useRef(null)
@@ -422,7 +423,10 @@ export default function App() {
     const isRtmp = /^rtmp(s)?:/i.test(selected.url)
     const isRtsp = /^rtsp:/i.test(selected.url)
     let mediaRecoveryUsed = false
+    let nativeFallbackUsed = false
     let networkRetries = 0
+    let retryTimer = null
+    const canUseNativeHls = isHls && Boolean(video.canPlayType('application/vnd.apple.mpegurl') || video.canPlayType('application/x-mpegURL'))
     if (isRtmp || isRtsp) {
       setNotice('This stream uses ' + (isRtmp ? 'RTMP' : 'RTSP') + ', which browsers cannot play directly. Use an authorized HLS (.m3u8), DASH (.mpd), or browser-compatible HTTPS stream version.')
     } else if ((isFlv || isMpegTs) && mpegts.isSupported()) {
@@ -449,6 +453,10 @@ export default function App() {
       }
     } else if ((isFlv || isMpegTs) && !mpegts.isSupported()) {
       setNotice('This browser does not support the MPEG-TS/FLV playback engine. Try HLS (.m3u8) or DASH (.mpd) instead.')
+    } else if (isHls && !Hls.isSupported() && canUseNativeHls) {
+      video.src = selected.url
+      video.load()
+      video.play().then(() => setPlaying(true)).catch(() => setNotice('HLS stream is ready. Press Play to start playback.'))
     } else if (isDash && dashjs.supportsMediaSource()) {
       const dash = dashjs.MediaPlayer().create()
       hlsRef.current = dash
@@ -464,16 +472,16 @@ export default function App() {
         capLevelToPlayerSize: true,
         startLevel: -1,
         startFragPrefetch: true,
-        lowLatencyMode: true,
-        liveSyncDurationCount: 2,
-        liveMaxLatencyDurationCount: 6,
+        lowLatencyMode: false,
+        liveSyncDurationCount: 3,
+        liveMaxLatencyDurationCount: 9,
         maxLiveSyncPlaybackRate: 1.08,
         abrEwmaDefaultEstimate: 900000,
         maxLoadingDelay: 3,
         maxStarvationDelay: 3,
-        maxBufferLength: 12,
-        maxMaxBufferLength: 30,
-        backBufferLength: 10,
+        maxBufferLength: 30,
+        maxMaxBufferLength: 60,
+        backBufferLength: 30,
         manifestLoadingTimeOut: 15000,
         levelLoadingTimeOut: 20000,
         fragLoadingTimeOut: 25000,
@@ -494,18 +502,26 @@ export default function App() {
         if (!data.fatal) return
         if (data.type === Hls.ErrorTypes.NETWORK_ERROR && networkRetries < 4) {
           networkRetries += 1
-          const delay = Math.min(1500 * networkRetries, 6000)
-          setNotice('Connection interrupted. Reconnecting (' + networkRetries + '/4)…')
-          window.setTimeout(() => {
+          const delay = Math.min(1200 * networkRetries, 6000)
+          setNotice('Connection interrupted. Reconnecting (' + networkRetries + '/5)…')
+          retryTimer = window.setTimeout(() => {
             if (hlsRef.current === hls) hls.startLoad()
           }, delay)
         } else if (data.type === Hls.ErrorTypes.MEDIA_ERROR && !mediaRecoveryUsed) {
           mediaRecoveryUsed = true
           setNotice('Recovering the media decoder…')
           hls.recoverMediaError()
+        } else if (!nativeFallbackUsed && canUseNativeHls) {
+          nativeFallbackUsed = true
+          hls.destroy()
+          if (hlsRef.current === hls) hlsRef.current = null
+          setNotice('Switching to the device native HLS player…')
+          video.src = selected.url
+          video.load()
+          video.play().then(() => setPlaying(true)).catch(() => setNotice('Native HLS is ready. Press Play, or the stream may be blocked by its provider.'))
         } else {
           setPlaying(false)
-          setNotice('This channel could not connect after several attempts. The source may be offline, blocked in your region, or blocking browser playback. Try another channel.')
+          setNotice('This channel could not connect after several attempts. The source may be offline, region-restricted, CORS-blocked, or using an unsupported codec. Try Retry or another channel.')
           hls.destroy()
           if (hlsRef.current === hls) hlsRef.current = null
         }
@@ -537,17 +553,23 @@ export default function App() {
       setPlaying(true)
       setNotice('')
     }
+    const onStalled = () => {
+      if (!video.paused) setNotice('The stream has stalled. Waiting for data…')
+    }
     video.addEventListener('error', onVideoError)
     video.addEventListener('waiting', onWaiting)
+    video.addEventListener('stalled', onStalled)
     video.addEventListener('playing', onPlaying)
     setRecent(old => [selected.id, ...old.filter(id => id !== selected.id)].slice(0, 30))
     return () => {
       video.removeEventListener('error', onVideoError)
       video.removeEventListener('waiting', onWaiting)
+      video.removeEventListener('stalled', onStalled)
       video.removeEventListener('playing', onPlaying)
+      if (retryTimer) window.clearTimeout(retryTimer)
       if (hlsRef.current) { if (typeof hlsRef.current.destroy === 'function') hlsRef.current.destroy(); else if (typeof hlsRef.current.reset === 'function') hlsRef.current.reset(); hlsRef.current = null }
     }
-  }, [selected?.id, selected?.url])
+  }, [selected?.id, selected?.url, playbackAttempt])
 
   useEffect(() => {
     const hls = hlsRef.current
@@ -818,7 +840,7 @@ export default function App() {
                   <div className="player-controls"><button onClick={togglePlayback} aria-label={playing ? 'Pause' : 'Play'}>{playing ? <Pause size={18} fill="currentColor"/> : <Play size={18} fill="currentColor"/>}</button><button onClick={() => setMuted(!muted)} aria-label="Toggle mute">{muted ? <VolumeX size={18}/> : <Volume2 size={18}/>}</button><input aria-label="Volume" type="range" min="0" max="1" step=".05" value={muted ? 0 : volume} onChange={e => { setVolume(Number(e.target.value)); setMuted(false) }}/><div className="control-spacer"/><select aria-label="Quality preference" value={quality} onChange={e => setQuality(e.target.value)}><option>Auto</option><option>1080p</option><option>720p</option><option>480p</option></select><button onClick={openSystemPictureInPicture} aria-label="Play outside app" title="System picture-in-picture (outside app)"><PictureInPicture2 size={18}/></button><button onClick={() => setMiniPlayer(v => !v)} aria-label={miniPlayer ? "Close mini player" : "Open in-app mini player"} title={miniPlayer ? "Close mini player" : "In-app mini player"}><PictureInPicture2 size={18}/></button><button onClick={landscapeMode} aria-label="Landscape mode" title="Open landscape mode"><MonitorPlay size={18}/></button><button onClick={fullscreen} aria-label="Fullscreen" title="Fullscreen"><Maximize size={18}/></button></div>
                 </div>
                 {selected && <div className="now-playing"><div className="channel-logo large" style={{background:selected.color}}>{selected.logo && selected.logo.length < 3 ? selected.logo : <Tv size={21}/>}</div><div className="now-title"><span>NOW PLAYING</span><h2>{selected.name}</h2><p>{selected.group} <b>·</b> {selected.country || 'Global'}</p></div><button className={`round-action ${favorites.includes(selected.id) ? 'favorited' : ''}`} onClick={() => toggleFavorite(selected)} title="Toggle favorite"><Heart size={18} fill={favorites.includes(selected.id) ? 'currentColor' : 'none'}/></button></div>}
-                {notice && <div className="notice"><Info size={16}/><span>{notice}</span><button onClick={() => setNotice('')}><X size={15}/></button></div>}
+                {notice && <div className="notice"><Info size={16}/><span>{notice}</span><button className="notice-retry" onClick={() => { setNotice('Reconnecting to ' + (selected?.name || 'stream') + '…'); setPlaybackAttempt(n => n + 1) }}>Retry</button><button onClick={() => setNotice('')} aria-label="Dismiss message"><X size={15}/></button></div>}
               </div>
               <aside className="channel-panel"><div className="panel-heading"><div><h3>Channel list</h3><p>{filteredChannels.length} channels available</p></div><button className="icon-button small" onClick={() => setShowImport(true)} title="Add playlist"><Plus size={17}/></button></div><div className="channel-list">{filteredChannels.slice(0, channelListLimit).map((c,i) => <ChannelRow key={c.id} channel={c} active={selected?.id === c.id} favorite={favorites.includes(c.id)} onClick={() => selectChannel(c)} onFavorite={() => toggleFavorite(c)} index={i}/>)}</div>{filteredChannels.length > channelListLimit && <button className="load-more-channels" onClick={() => setChannelListLimit(n => Math.min(n + 300, filteredChannels.length))}>Load more ({filteredChannels.length - channelListLimit} remaining)</button>}</aside>
             </div>}
